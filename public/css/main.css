@@ -1,0 +1,449 @@
+/* line 18, ../../client_src/sass/main.sass */
+h1 {
+  border-bottom: 1px solid red;
+  color: red;
+  padding-bottom: 4px;
+}
+
+/* line 24, ../../client_src/sass/main.sass */
+.T-gallery {
+  background: white;
+  position: relative;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+/* line 29, ../../client_src/sass/main.sass */
+.T-gallery .primary {
+  height: 450px;
+  overflow: hidden;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+/* line 36, ../../client_src/sass/main.sass */
+.T-gallery .secondary {
+  background: transparent;
+  margin-left: 0;
+  margin-right: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: relative;
+}
+/* line 49, ../../client_src/sass/main.sass */
+.T-gallery .secondary .badge {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+/* line 54, ../../client_src/sass/main.sass */
+.T-gallery .secondary .label {
+  font-size: 1em;
+}
+/* line 57, ../../client_src/sass/main.sass */
+.T-gallery .secondary .progress {
+  width: 190px;
+  margin: 5px auto;
+  height: 5px;
+  position: relative;
+  opacity: 1;
+  -webkit-transition: opacity 0.3s linear;
+  -moz-transition: opacity 0.3s linear;
+  -o-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+}
+/* line 66, ../../client_src/sass/main.sass */
+.T-gallery .secondary .progress.veil {
+  opacity: 0;
+}
+/* line 68, ../../client_src/sass/main.sass */
+.T-gallery .secondary .progress .progress-bar {
+  -webkit-transition: none 1s;
+  -moz-transition: none 1s;
+  -o-transition: none 1s;
+  transition: none 1s;
+}
+/* line 72, ../../client_src/sass/main.sass */
+.T-gallery .galleries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+/* line 78, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery {
+  cursor: pointer;
+  margin: 10px 0;
+  padding: 0;
+  position: relative;
+}
+/* line 84, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery:first-child {
+  margin-top: 0;
+}
+/* line 87, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery:last-child {
+  margin-bottom: 0;
+}
+/* line 90, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery .title {
+  background: rgba(255, 255, 255, 0.5);
+  bottom: 10px;
+  color: white;
+  padding: 5px 10px;
+  position: absolute;
+  right: 0;
+  text-shadow: 0 0 7px #333333;
+  z-index: 1001;
+  opacity: 0;
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+  -webkit-transform:  translateX(-154px);
+  -moz-transform:  translateX(-154px);
+  -ms-transform:  translateX(-154px);
+  -o-transform:  translateX(-154px);
+  transform:  translateX(-154px);
+}
+/* line 103, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery .count {
+  background: rgba(255, 255, 255, 0.5);
+  top: 5px;
+  color: white;
+  padding: 4px 10px 5px 10px;
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  line-height: 12px;
+  text-shadow: 0 0 7px #333333;
+  z-index: 1001;
+  opacity: 0;
+  word-spacing: -7px;
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+  -webkit-transform:  translateY(-20px);
+  -moz-transform:  translateY(-20px);
+  -ms-transform:  translateY(-20px);
+  -o-transform:  translateY(-20px);
+  transform:  translateY(-20px);
+}
+/* line 119, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery img {
+  width: 130px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1000;
+  opacity: 1;
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+}
+/* line 129, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery:hover .count {
+  opacity: 1;
+  -webkit-transform:  translateY(0);
+  -moz-transform:  translateY(0);
+  -ms-transform:  translateY(0);
+  -o-transform:  translateY(0);
+  transform:  translateY(0);
+}
+/* line 133, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery:hover .title {
+  opacity: 1;
+  -webkit-transform:  translateX(6px);
+  -moz-transform:  translateX(6px);
+  -ms-transform:  translateX(6px);
+  -o-transform:  translateX(6px);
+  transform:  translateX(6px);
+}
+/* line 137, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery:hover img {
+  -webkit-transform:  scale(1.05, 1.05) translateX(3px);
+  -moz-transform:  scale(1.05, 1.05) translateX(3px);
+  -ms-transform:  scale(1.05, 1.05) translateX(3px);
+  -o-transform:  scale(1.05, 1.05) translateX(3px);
+  transform:  scale(1.05, 1.05) translateX(3px);
+}
+/* line 141, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery.active .title {
+  opacity: 1;
+  -webkit-transform:  translateX(9px);
+  -moz-transform:  translateX(9px);
+  -ms-transform:  translateX(9px);
+  -o-transform:  translateX(9px);
+  transform:  translateX(9px);
+}
+/* line 145, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery.active .count {
+  opacity: 1;
+  -webkit-transform:  translateY(0);
+  -moz-transform:  translateY(0);
+  -ms-transform:  translateY(0);
+  -o-transform:  translateY(0);
+  transform:  translateY(0);
+}
+/* line 148, ../../client_src/sass/main.sass */
+.T-gallery .galleries .gallery.active img {
+  -webkit-transform:  scale(1.07, 1.07) translateX(4px);
+  -moz-transform:  scale(1.07, 1.07) translateX(4px);
+  -ms-transform:  scale(1.07, 1.07) translateX(4px);
+  -o-transform:  scale(1.07, 1.07) translateX(4px);
+  transform:  scale(1.07, 1.07) translateX(4px);
+}
+/* line 152, ../../client_src/sass/main.sass */
+.T-gallery .thumbs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* line 157, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb {
+  cursor: pointer;
+  margin: 10px 0;
+  padding: 0;
+}
+/* line 162, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb:first-child {
+  margin-top: 0;
+}
+/* line 165, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb:last-child {
+  margin-bottom: 0;
+}
+/* line 168, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb .title {
+  background: rgba(255, 255, 255, 0.5);
+  bottom: 10px;
+  color: white;
+  padding: 5px 10px;
+  position: absolute;
+  left: 0;
+  text-shadow: 0 0 7px #333333;
+  z-index: 1001;
+  opacity: 0;
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+  -webkit-transform:  translateX(154px);
+  -moz-transform:  translateX(154px);
+  -ms-transform:  translateX(154px);
+  -o-transform:  translateX(154px);
+  transform:  translateX(154px);
+}
+/* line 181, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb img {
+  margin: 0;
+  padding: 0;
+  width: 130px;
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+}
+/* line 188, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb:hover .title {
+  opacity: 1;
+  -webkit-transform:  translateX(-6px);
+  -moz-transform:  translateX(-6px);
+  -ms-transform:  translateX(-6px);
+  -o-transform:  translateX(-6px);
+  transform:  translateX(-6px);
+}
+/* line 192, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb:hover img {
+  -webkit-transform:  scale(1.05, 1.05) translateX(-3px);
+  -moz-transform:  scale(1.05, 1.05) translateX(-3px);
+  -ms-transform:  scale(1.05, 1.05) translateX(-3px);
+  -o-transform:  scale(1.05, 1.05) translateX(-3px);
+  transform:  scale(1.05, 1.05) translateX(-3px);
+}
+/* line 196, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb.active .title {
+  opacity: 1;
+  -webkit-transform:  translateX(-9px);
+  -moz-transform:  translateX(-9px);
+  -ms-transform:  translateX(-9px);
+  -o-transform:  translateX(-9px);
+  transform:  translateX(-9px);
+}
+/* line 200, ../../client_src/sass/main.sass */
+.T-gallery .thumbs .thumb.active img {
+  -webkit-transform:  scale(1.07, 1.07) translateX(-4px);
+  -moz-transform:  scale(1.07, 1.07) translateX(-4px);
+  -ms-transform:  scale(1.07, 1.07) translateX(-4px);
+  -o-transform:  scale(1.07, 1.07) translateX(-4px);
+  transform:  scale(1.07, 1.07) translateX(-4px);
+}
+/* line 206, ../../client_src/sass/main.sass */
+.T-gallery .stage {
+  background: transparent;
+  line-height: 450px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  z-index: 1000;
+}
+/* line 214, ../../client_src/sass/main.sass */
+.T-gallery .stage img {
+  max-height: 100%;
+  max-width: 100%;
+  opacity: 1;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+/* line 220, ../../client_src/sass/main.sass */
+.T-gallery .stage img.veil {
+  opacity: 0;
+}
+/* line 224, ../../client_src/sass/main.sass */
+.T-gallery .vpane {
+  border-radius: none;
+  color: white;
+  height: 450px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  width: 154px;
+  z-index: 1001;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+/* line 235, ../../client_src/sass/main.sass */
+.T-gallery .vpane .toggle {
+  position: absolute;
+  top: 48px;
+}
+/* line 239, ../../client_src/sass/main.sass */
+.T-gallery .vpane li {
+  opacity: 1;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+/* line 244, ../../client_src/sass/main.sass */
+.T-gallery .vpane li.veil {
+  opacity: 0;
+}
+/* line 248, ../../client_src/sass/main.sass */
+.T-gallery .vpane.vpane-left {
+  float: left;
+}
+/* line 252, ../../client_src/sass/main.sass */
+.T-gallery .vpane.vpane-right {
+  float: right;
+}
+/* line 261, ../../client_src/sass/main.sass */
+.T-gallery .slideRight,
+.T-gallery .slideLeft {
+  display: block !important;
+  opacity: 1;
+  padding: 10px 12px;
+  width: 154px;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+/* line 271, ../../client_src/sass/main.sass */
+.T-gallery .slideRight.ng-hide,
+.T-gallery .slideLeft.ng-hide {
+  display: none;
+  opacity: 0;
+  padding-left: 0;
+  padding-right: 0;
+  width: 0;
+  -webkit-transform: translateX(-166px);
+  -moz-transform: translateX(-166px);
+  -ms-transform: translateX(-166px);
+  -o-transform: translateX(-166px);
+  transform: translateX(-166px);
+}
+/* line 280, ../../client_src/sass/main.sass */
+.T-gallery .slideLeft.ng-hide {
+  -webkit-transform: translateX(166px);
+  -moz-transform: translateX(166px);
+  -ms-transform: translateX(166px);
+  -o-transform: translateX(166px);
+  transform: translateX(166px);
+}
+/* line 283, ../../client_src/sass/main.sass */
+.T-gallery .slider {
+  position: relative;
+}
+/* line 286, ../../client_src/sass/main.sass */
+.T-gallery .slider .scroller {
+  position: absolute;
+  right: 4px;
+  top: 0;
+  width: 4px;
+  height: 0;
+  background: white;
+  opacity: 1;
+  -webkit-transition: opacity 0.2s linear;
+  -moz-transition: opacity 0.2s linear;
+  -o-transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear;
+  -webkit-box-shadow: 0 0 4px gray;
+  -moz-box-shadow: 0 0 4px gray;
+  box-shadow: 0 0 4px gray;
+}
+/* line 297, ../../client_src/sass/main.sass */
+.T-gallery .slider .scroller.veil {
+  opacity: 0;
+}
+/* line 300, ../../client_src/sass/main.sass */
+.T-gallery .slider .blender {
+  position: absolute;
+  right: 12px;
+  height: 20px;
+  width: 142px;
+  background: black;
+  opacity: 1;
+  -webkit-transition: opacity 0.2s linear;
+  -moz-transition: opacity 0.2s linear;
+  -o-transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear;
+}
+/* line 308, ../../client_src/sass/main.sass */
+.T-gallery .slider .blender.veil {
+  opacity: 0;
+}
+/* line 311, ../../client_src/sass/main.sass */
+.T-gallery .slider .blender.blender-top {
+  top: 0;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(10px, #ffffff), color-stop(100%, rgba(255, 255, 255, 0)));
+  background: -webkit-linear-gradient(#ffffff 10px, rgba(255, 255, 255, 0));
+  background: -moz-linear-gradient(#ffffff 10px, rgba(255, 255, 255, 0));
+  background: -o-linear-gradient(#ffffff 10px, rgba(255, 255, 255, 0));
+  background: linear-gradient(#ffffff 10px, rgba(255, 255, 255, 0));
+}
+/* line 314, ../../client_src/sass/main.sass */
+.T-gallery .slider .blender.blender-btm {
+  bottom: 0;
+  background: -webkit-gradient(linear, 50% 0%, 50% 10, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 10px);
+  background: -moz-linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 10px);
+  background: -o-linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 10px);
+  background: linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 10px);
+}

@@ -1,0 +1,11 @@
+dependencies: 
+
+	jquery
+	angularjs
+
+	angular-mousewheel(Hamster.js) https://github.com/monospaced/angular-mousewheel
+
+	JavaScript Image Processing Library: http://www.pixastic.com/lib/docs/
+
+check it :
+	http://browserify.org/

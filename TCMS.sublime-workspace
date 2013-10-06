@@ -1,0 +1,430 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"trans",
+				"translateX"
+			],
+			[
+				"lin",
+				"line-height"
+			],
+			[
+				"con",
+				"console"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "views/gallery.jade",
+			"settings":
+			{
+				"buffer_size": 1832,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client_src/coffee/directives.coffee",
+			"settings":
+			{
+				"buffer_size": 3084,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client_src/coffee/controllers.coffee",
+			"settings":
+			{
+				"buffer_size": 1493,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client_src/coffee/services.coffee",
+			"settings":
+			{
+				"buffer_size": 1164,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client_src/coffee/main.coffee",
+			"settings":
+			{
+				"buffer_size": 4867,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client_src/sass/main.sass",
+			"settings":
+			{
+				"buffer_size": 3611,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 54.0,
+		"selected_items":
+		[
+			[
+				"set syn sass",
+				"Set Syntax: Sass"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/tehdb/Projects/TCMS/public/js/app.js",
+		"/home/tehdb/Projects/TCMS/public/js/main.js",
+		"/home/tehdb/Projects/TCMS/node_modules/grunt-contrib-watch/node_modules/tiny-lr/node_modules/qs/test/browser/jquery.js",
+		"/home/tehdb/Projects/TCMS/client_src/coffee/controllers.coffee",
+		"/home/tehdb/Projects/TCMS/client_src/sass/main.sass",
+		"/home/tehdb/Dokumente/sass",
+		"/home/tehdb/Projects/TCMS/views/gallery.jade",
+		"/home/tehdb/Projects/TCMS/client_src/coffee/gallery-app.coffee",
+		"/home/tehdb/Projects/TCMS/client_src/coffee/services.coffee",
+		"/home/tehdb/Projects/TCMS/Gruntfile.coffee",
+		"/home/tehdb/Projects/TCMS/db.coffee",
+		"/home/tehdb/Projects/TCMS/views/layout.jade",
+		"/home/tehdb/Projects/TCMS/client_src/coffee/main.coffee",
+		"/home/tehdb/Projects/TCMS/README",
+		"/home/tehdb/Projects/TCMS/public/css/main.css",
+		"/home/tehdb/Projects/TCMS/client_src/sass/normalize.scss",
+		"/home/tehdb/Tools/pixastic-lib.latest/license.txt",
+		"/home/tehdb/Tools/pixastic/pixastic.js",
+		"/home/tehdb/Tools/pixastic/README",
+		"/usr/share/applications/sublime.desktop",
+		"/usr/share/applications/defaults.list"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"mouseWeelScroll",
+			")\n",
+			"mouseWeelScroll",
+			"console.log(",
+			"sliderContent",
+			"checkImgsLoaded",
+			"dynbg",
+			"box-shadow",
+			"transition",
+			"font-",
+			"translateX",
+			"transi",
+			"elementIndex",
+			"panel",
+			"addClass",
+			"removeClass",
+			"Pixastic",
+			"scope.elementIndex",
+			"scope.galleryIndex",
+			"gedit.desktop",
+			"gedit"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"sublime.desktop"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "views/gallery.jade",
+					"settings":
+					{
+						"buffer_size": 1832,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								568,
+								568
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 153.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "client_src/coffee/directives.coffee",
+					"settings":
+					{
+						"buffer_size": 3084,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2113,
+								2113
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1020.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "client_src/coffee/controllers.coffee",
+					"settings":
+					{
+						"buffer_size": 1493,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1283,
+								1283
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "client_src/coffee/services.coffee",
+					"settings":
+					{
+						"buffer_size": 1164,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1101,
+								1101
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "client_src/coffee/main.coffee",
+					"settings":
+					{
+						"buffer_size": 4867,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								776,
+								776
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "client_src/sass/main.sass",
+					"settings":
+					{
+						"buffer_size": 3611,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2888,
+								2888
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Sass/Syntaxes/Sass.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2778.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"controllers",
+				"client_src/coffee/controllers.coffee"
+			],
+			[
+				"gallery",
+				"views/gallery.jade"
+			],
+			[
+				"gallery.js",
+				"node_modules/grunt-contrib-watch/node_modules/tiny-lr/node_modules/qs/test/browser/jquery.js"
+			],
+			[
+				"main.coffee",
+				"client_src/coffee/main.coffee"
+			],
+			[
+				"main.css",
+				"public/css/main.css"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 189.0,
+	"status_bar_visible": true
+}

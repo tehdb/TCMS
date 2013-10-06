@@ -1,0 +1,27 @@
+doctype 5
+html
+	head
+		title= title
+	
+		//link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css')
+		link(rel='stylesheet', href="/css/main.css")
+
+	body
+
+		div.container
+			block content
+
+		script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+		script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.2/angular.min.js")
+		script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.2/angular-animate.min.js")
+		
+		script(src="/libs/jquery.mousewheel.js")
+		script(src="/libs/jquery.transit.js")
+		script(src="/libs/jquery.actual.js")
+
+		script(src="/libs/pixastic/pixastic.core.js")
+		script(src="/libs/pixastic/colorhistogram.js")
+		script(src="/libs/pixastic/pixastic.jquery.js")
+
+		script(src='/js/app.js')

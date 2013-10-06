@@ -1,0 +1,5 @@
+/client_src/*
+/public/*
+/uploads/*
+.sass-cache/*
+node_modules/*
