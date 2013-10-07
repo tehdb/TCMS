@@ -31,8 +31,11 @@ block content
 							alt="{{e.title}}")
 
 			div.vpane.vpane-right.slider.slideLeft(
-				slider="reveal", 
+				slider="reveal",
+				slider-ani="thumbsAni"
 				slider-depend="thumbsLoaded",
+				on-gallery-change="thumbsLoaded"
+				on-element-change="elementIndex"
 				ng-show="thumbsShow",
 				scroller
 				dropzone
@@ -42,6 +45,10 @@ block content
 						ng-repeat="e in elements",
 						ng-click="switchImage($index)"
 						ng-class="{'active': $index == elementIndex}"
+						slider-element="switchGalleryProc"
+						slider-element-index="{{$index}}"
+						slider-element-count="{{elements.length}}"
+						slider-element-ani="thumbsAni"
 					)
 						div.title {{e.title}}
 						img(

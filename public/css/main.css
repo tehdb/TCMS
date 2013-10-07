@@ -58,10 +58,10 @@ h1 {
 }
 /* line 68, ../../client_src/sass/main.sass */
 .T-gallery .secondary .progress .progress-bar {
-  -webkit-transition: none 1s;
-  -moz-transition: none 1s;
-  -o-transition: none 1s;
-  transition: none 1s;
+  -webkit-transition: none 0;
+  -moz-transition: none 0;
+  -o-transition: none 0;
+  transition: none 0;
 }
 /* line 72, ../../client_src/sass/main.sass */
 .T-gallery .galleries {
@@ -206,16 +206,18 @@ h1 {
   cursor: pointer;
   margin: 10px 0;
   padding: 0;
+  position: relative;
+  opacity: 1;
 }
-/* line 162, ../../client_src/sass/main.sass */
+/* line 172, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb:first-child {
   margin-top: 0;
 }
-/* line 165, ../../client_src/sass/main.sass */
+/* line 175, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb:last-child {
   margin-bottom: 0;
 }
-/* line 168, ../../client_src/sass/main.sass */
+/* line 178, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb .title {
   background: rgba(255, 255, 255, 0.5);
   bottom: 10px;
@@ -236,7 +238,7 @@ h1 {
   -o-transform:  translateX(154px);
   transform:  translateX(154px);
 }
-/* line 181, ../../client_src/sass/main.sass */
+/* line 191, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb img {
   margin: 0;
   padding: 0;
@@ -246,7 +248,7 @@ h1 {
   -o-transition: all 0.15s linear;
   transition: all 0.15s linear;
 }
-/* line 188, ../../client_src/sass/main.sass */
+/* line 198, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb:hover .title {
   opacity: 1;
   -webkit-transform:  translateX(-6px);
@@ -255,7 +257,7 @@ h1 {
   -o-transform:  translateX(-6px);
   transform:  translateX(-6px);
 }
-/* line 192, ../../client_src/sass/main.sass */
+/* line 202, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb:hover img {
   -webkit-transform:  scale(1.05, 1.05) translateX(-3px);
   -moz-transform:  scale(1.05, 1.05) translateX(-3px);
@@ -263,7 +265,7 @@ h1 {
   -o-transform:  scale(1.05, 1.05) translateX(-3px);
   transform:  scale(1.05, 1.05) translateX(-3px);
 }
-/* line 196, ../../client_src/sass/main.sass */
+/* line 206, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb.active .title {
   opacity: 1;
   -webkit-transform:  translateX(-9px);
@@ -272,7 +274,7 @@ h1 {
   -o-transform:  translateX(-9px);
   transform:  translateX(-9px);
 }
-/* line 200, ../../client_src/sass/main.sass */
+/* line 210, ../../client_src/sass/main.sass */
 .T-gallery .thumbs .thumb.active img {
   -webkit-transform:  scale(1.07, 1.07) translateX(-4px);
   -moz-transform:  scale(1.07, 1.07) translateX(-4px);
@@ -280,7 +282,7 @@ h1 {
   -o-transform:  scale(1.07, 1.07) translateX(-4px);
   transform:  scale(1.07, 1.07) translateX(-4px);
 }
-/* line 206, ../../client_src/sass/main.sass */
+/* line 216, ../../client_src/sass/main.sass */
 .T-gallery .stage {
   background: transparent;
   line-height: 450px;
@@ -289,7 +291,7 @@ h1 {
   text-align: center;
   z-index: 1000;
 }
-/* line 214, ../../client_src/sass/main.sass */
+/* line 224, ../../client_src/sass/main.sass */
 .T-gallery .stage img {
   max-height: 100%;
   max-width: 100%;
@@ -299,11 +301,11 @@ h1 {
   -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
-/* line 220, ../../client_src/sass/main.sass */
+/* line 230, ../../client_src/sass/main.sass */
 .T-gallery .stage img.veil {
   opacity: 0;
 }
-/* line 224, ../../client_src/sass/main.sass */
+/* line 234, ../../client_src/sass/main.sass */
 .T-gallery .vpane {
   border-radius: none;
   color: white;
@@ -318,12 +320,12 @@ h1 {
   -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
-/* line 235, ../../client_src/sass/main.sass */
+/* line 245, ../../client_src/sass/main.sass */
 .T-gallery .vpane .toggle {
   position: absolute;
   top: 48px;
 }
-/* line 239, ../../client_src/sass/main.sass */
+/* line 249, ../../client_src/sass/main.sass */
 .T-gallery .vpane li {
   opacity: 1;
   -webkit-transition: all 0.3s linear;
@@ -336,19 +338,19 @@ h1 {
   -o-transform: translateX(0);
   transform: translateX(0);
 }
-/* line 244, ../../client_src/sass/main.sass */
+/* line 254, ../../client_src/sass/main.sass */
 .T-gallery .vpane li.veil {
   opacity: 0;
 }
-/* line 248, ../../client_src/sass/main.sass */
+/* line 258, ../../client_src/sass/main.sass */
 .T-gallery .vpane.vpane-left {
   float: left;
 }
-/* line 252, ../../client_src/sass/main.sass */
+/* line 262, ../../client_src/sass/main.sass */
 .T-gallery .vpane.vpane-right {
   float: right;
 }
-/* line 261, ../../client_src/sass/main.sass */
+/* line 271, ../../client_src/sass/main.sass */
 .T-gallery .slideRight,
 .T-gallery .slideLeft {
   display: block !important;
@@ -365,7 +367,7 @@ h1 {
   -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
-/* line 271, ../../client_src/sass/main.sass */
+/* line 281, ../../client_src/sass/main.sass */
 .T-gallery .slideRight.ng-hide,
 .T-gallery .slideLeft.ng-hide {
   display: none;
@@ -379,7 +381,7 @@ h1 {
   -o-transform: translateX(-166px);
   transform: translateX(-166px);
 }
-/* line 280, ../../client_src/sass/main.sass */
+/* line 290, ../../client_src/sass/main.sass */
 .T-gallery .slideLeft.ng-hide {
   -webkit-transform: translateX(166px);
   -moz-transform: translateX(166px);
@@ -387,11 +389,11 @@ h1 {
   -o-transform: translateX(166px);
   transform: translateX(166px);
 }
-/* line 283, ../../client_src/sass/main.sass */
+/* line 293, ../../client_src/sass/main.sass */
 .T-gallery .slider {
   position: relative;
 }
-/* line 286, ../../client_src/sass/main.sass */
+/* line 296, ../../client_src/sass/main.sass */
 .T-gallery .slider .scroller {
   position: absolute;
   right: 4px;
@@ -408,11 +410,11 @@ h1 {
   -moz-box-shadow: 0 0 4px gray;
   box-shadow: 0 0 4px gray;
 }
-/* line 297, ../../client_src/sass/main.sass */
+/* line 307, ../../client_src/sass/main.sass */
 .T-gallery .slider .scroller.veil {
   opacity: 0;
 }
-/* line 300, ../../client_src/sass/main.sass */
+/* line 310, ../../client_src/sass/main.sass */
 .T-gallery .slider .blender {
   position: absolute;
   right: 12px;
@@ -425,11 +427,11 @@ h1 {
   -o-transition: opacity 0.2s linear;
   transition: opacity 0.2s linear;
 }
-/* line 308, ../../client_src/sass/main.sass */
+/* line 318, ../../client_src/sass/main.sass */
 .T-gallery .slider .blender.veil {
   opacity: 0;
 }
-/* line 311, ../../client_src/sass/main.sass */
+/* line 321, ../../client_src/sass/main.sass */
 .T-gallery .slider .blender.blender-top {
   top: 0;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(10px, #ffffff), color-stop(100%, rgba(255, 255, 255, 0)));
@@ -438,7 +440,7 @@ h1 {
   background: -o-linear-gradient(#ffffff 10px, rgba(255, 255, 255, 0));
   background: linear-gradient(#ffffff 10px, rgba(255, 255, 255, 0));
 }
-/* line 314, ../../client_src/sass/main.sass */
+/* line 324, ../../client_src/sass/main.sass */
 .T-gallery .slider .blender.blender-btm {
   bottom: 0;
   background: -webkit-gradient(linear, 50% 0%, 50% 10, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));

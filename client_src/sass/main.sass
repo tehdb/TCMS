@@ -66,7 +66,7 @@ h1
 			&.veil
 				opacity : 0
 			.progress-bar
-				+single-transition( none )
+				+single-transition( $property: none, $duration : 0)
 
 
 	.galleries
@@ -158,6 +158,16 @@ h1
 			cursor : pointer
 			margin : 10px 0
 			padding : 0
+			position : relative
+			opacity : 1
+			// +simple-transform( $trans-x : 0 )
+			// +single-transition( $property:all, $duration:0.15s, $function:linear )
+
+			
+			// &.veil
+			// 	opacity : 0
+			// 	+simple-transform( $trans-x : 10px )
+			
 
 			&:first-child
 				margin-top: 0

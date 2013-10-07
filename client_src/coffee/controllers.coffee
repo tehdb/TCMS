@@ -8,6 +8,9 @@ app.controller "GalleryCtrl", ["$scope", "$timeout", "AlbumService", 'settings',
 	scope.thumbsShow = settings.thumbnailsShow
 	scope.background = ''
 	scope.slideshow = false
+	scope.switchGalleryProc = false
+
+	scope.thumbsAni = false
 
 	as.getAlbum( 1, (data)->
 		scope.album = data
@@ -29,28 +32,31 @@ app.controller "GalleryCtrl", ["$scope", "$timeout", "AlbumService", 'settings',
 		thumbsLoadedCount = 0
 		scope.thumbsLoaded = false
 		scope.slideshow = false
+		scope.switchGalleryProc = true
 		
 		scope.switchImage(0, ->
 			scope.gallery = scope.album.galleries[scope.galleryIndex]
 			scope.elements = scope.gallery.elements
+			scope.switchGalleryProc = false
 		)
 
 
-	scope.nextImage = ( slideshow = false)->
-		
-		scope.slideshow = false if slideshow isnt true
-
+	scope.nextImage = ( slideshow = false )->
 		id = scope.elementIndex+1
-		if id > (scope.elements.length-1)
+		if id > ( scope.elements.length - 1 )
 			id = 0
-		scope.switchImage(id)
+		scope.switchImage( id )
 
-	scope.prevImage = ()->
+		if slideshow isnt true
+			scope.slideshow = false
+
+
+	scope.prevImage = (slideshow = false)->
 		scope.slideshow = false
 		id = scope.elementIndex-1
 		if id < 0
-			id = (scope.elements.length-1)
-		scope.switchImage(id)
+			id = ( scope.elements.length - 1 )
+		scope.switchImage( id )
 
 
 	scope.switchImage = (id, callback) ->
