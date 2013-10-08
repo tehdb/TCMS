@@ -22,6 +22,7 @@ app.controller "GalleryCtrl", ["$scope", "$timeout", "AlbumService", 'settings',
 		thumbsLoadedCount++
 		if thumbsLoadedCount is scope.elements.length
 			scope.thumbsLoaded = true
+			#console.log("thumbs loaded " + scope.thumbsLoaded )
 
 
 	scope.switchGallery = (id) ->

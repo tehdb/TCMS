@@ -220,17 +220,6 @@
     }
   ]);
 
-  app.directive("imageOnLoad", function() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        return element.bind('load', function() {
-          return scope.$apply(attrs.imageOnLoad);
-        });
-      }
-    };
-  });
-
   app.directive("scroller", function() {
     return {
       restrict: 'A',
@@ -263,56 +252,219 @@
     };
   });
 
-  app.directive("sliderElement", function() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        var onChange, _ani, _count, _index;
-        _index = parseInt(attrs.sliderElementIndex, 10);
-        _count = parseInt(attrs.sliderElementCount, 10);
-        _ani = attrs.sliderElementAni;
-        onChange = function(val) {
-          if (val) {
-            return element.transition({
-              opacity: 0,
-              x: 40,
-              delay: 100 * _index,
-              duration: 200
-            });
-          } else {
-            return element.transition({
-              opacity: 1,
-              x: 0,
-              delay: 100 * _index,
-              duration: 200,
-              onComplete: function() {
-                console.log(_index + 1, _count);
-                if ((_index + 1) === _count) {
-                  console.log("finish");
-                  console.log(scope);
-                  return scope.thumbsAni = false;
-                }
-              }
-            });
-          }
-        };
-        if (attrs.sliderElement != null) {
-          return scope.$watch(attrs.sliderElement, function(newVal, oldVal) {
-            scope.thumbsAni = true;
-            return onChange(newVal);
-          }, false);
-        }
-      }
-    };
-  });
-
   app.directive("slider", [
     '$timeout', function(timeout) {
       return {
         restrict: 'A',
         require: '?scroller',
+        controller: [
+          '$scope', function(scope) {
+            return this.callMe = function() {
+              return scope.setLimits();
+            };
+          }
+        ],
         link: function(scope, element, attrs, scrollerCtrl) {
-          var contentPosition, limits, mouseDragDropScrolling, mouseWheelScrolling, scrolling, setLimits, _blenderBtm, _blenderTop, _content, _elementH, _scrollOffsetY;
+          var limits, _blenderBtm, _blenderTop, _content, _contentPosition, _elementH, _mouseDragDropScrolling, _mouseWheelScrolling, _scrollOffsetY, _scrolling, _setLimits;
+          _blenderTop = $('<div>').addClass('blender blender-top veil').appendTo(element);
+          _blenderBtm = $('<div>').addClass('blender blender-btm').appendTo(element);
+          _elementH = 0;
+          _scrollOffsetY = 0;
+          _content = element.find('ul').first();
+          limits = {
+            top: 0,
+            bottom: 0
+          };
+          scope.setLimits = function() {
+            return _setLimits();
+          };
+          _setLimits = function() {
+            limits = {
+              top: 0,
+              bottom: 0
+            };
+            return timeout(function() {
+              var containerH, contentH, elementPaddingBtm, elementPaddingTop;
+              _content = element.find('ul').first();
+              containerH = element.actual('outerHeight');
+              elementPaddingTop = parseInt(element.css('padding-top'), 10);
+              elementPaddingBtm = parseInt(element.css('padding-bottom'), 10);
+              containerH = containerH - elementPaddingTop - elementPaddingBtm;
+              contentH = _content.actual('outerHeight');
+              limits.bottom = containerH - contentH;
+              _elementH = element.find('li').first().actual('outerHeight', {
+                includeMargin: true
+              });
+              _scrollOffsetY = Math.round((containerH - _elementH) / 2);
+              _blenderTop.addClass('veil');
+              _blenderBtm.addClass('veil');
+              if (0 > limits.bottom) {
+                _scrolling(true);
+                scrollerCtrl.init(containerH, contentH, elementPaddingTop);
+                return _blenderBtm.removeClass('veil');
+              }
+            }, 500);
+          };
+          _scrolling = function(status) {
+            if (status == null) {
+              status = false;
+            }
+            if (status === true) {
+              _mouseWheelScrolling();
+              return _mouseDragDropScrolling();
+            } else {
+              element.unbind('mousewheel mouseenter mouseleave');
+              return _content.css('y', limits.top);
+            }
+          };
+          _mouseWheelScrolling = function() {
+            return element.mousewheel(function(event, delta, deltaX, deltaY) {
+              var y;
+              event.preventDefault;
+              event.stopPropagation;
+              y = parseInt(_content.css('y'), 10) + (delta * 20);
+              _contentPosition(y);
+              return false;
+            });
+          };
+          _contentPosition = function(y, ani) {
+            if (ani == null) {
+              ani = false;
+            }
+            if (y >= limits.top) {
+              y = limits.top;
+              _blenderTop.addClass('veil');
+            } else if (y <= limits.bottom) {
+              y = limits.bottom;
+              _blenderBtm.addClass('veil');
+            } else {
+              _blenderTop.removeClass('veil');
+              _blenderBtm.removeClass('veil');
+            }
+            if (ani) {
+              _content.transition({
+                'y': y
+              });
+            } else {
+              _content.css('y', y);
+            }
+            return scrollerCtrl.setPos(y);
+          };
+          _mouseDragDropScrolling = function() {
+            return element.mouseenter(function(event) {
+              event.preventDefault;
+              event.stopPropagation;
+              return scrollerCtrl.show();
+            }).mouseleave(function(event) {
+              event.preventDefault;
+              event.stopPropagation;
+              return scrollerCtrl.hide();
+            });
+          };
+          /*
+          		if attrs.onGalleryChange?
+          			scope.$watch( attrs.onGalleryChange, (newVal, oldVal) ->
+          				return if newVal is oldVal
+          				console.log("change")
+          				_scrolling( false )
+          			, false )
+          */
+
+          if (attrs.onElementChange != null) {
+            return scope.$watch(attrs.onElementChange, function(newVal, oldVal) {
+              var y;
+              if (newVal === oldVal) {
+                return;
+              }
+              y = -(_elementH * newVal) + _scrollOffsetY;
+              return _contentPosition(y, true);
+            }, false);
+          }
+        }
+      };
+    }
+  ]);
+
+  app.directive("sliderContent", [
+    '$timeout', function(timeout) {
+      return {
+        restrict: 'A',
+        scope: true,
+        require: '^slider',
+        link: function(scope, element, attrs, sliderCtrl) {}
+      };
+    }
+  ]);
+
+  app.directive("imageOnLoad", function() {
+    return {
+      restrict: 'A',
+      scope: true,
+      link: function(scope, element, attrs) {
+        return element.bind('load', function() {
+          console.log(scope.elements.length);
+          return scope.$apply(attrs.imageOnLoad);
+        });
+      }
+    };
+  });
+
+  app.directive("sliderElement", [
+    function() {
+      return {
+        restrict: 'A',
+        scope: true,
+        require: '^slider',
+        link: function(scope, element, attrs, sliderCtrl) {
+          var onChange;
+          onChange = function(val) {
+            var _count, _index;
+            _index = parseInt(attrs.sliderElementIndex, 10);
+            _count = parseInt(attrs.sliderElementCount, 10);
+            if (val) {
+              return element.transition({
+                opacity: 0,
+                x: 40,
+                delay: 100 * _index,
+                duration: 200
+              });
+            } else {
+              return element.transition({
+                opacity: 1,
+                x: 0,
+                delay: 100 * _index,
+                duration: 200,
+                onComplete: function() {
+                  if ((_index + 1) === _count) {
+                    return sliderCtrl.callMe();
+                  }
+                }
+              });
+            }
+          };
+          if (attrs.sliderElement != null) {
+            return scope.$watch(attrs.sliderElement, function(vnew, vold) {
+              return onChange(vnew);
+            }, false);
+          }
+        }
+      };
+    }
+  ]);
+
+  app.directive("slider2", [
+    '$timeout', function(timeout) {
+      return {
+        restrict: 'A',
+        require: '?scroller',
+        scope: true,
+        controller: [
+          '$scope', function(scope) {
+            return this.callMe = function() {};
+          }
+        ],
+        link: function(scope, element, attrs, scrollerCtrl) {
+          var limits, scrolling, setLimits, _blenderBtm, _blenderTop, _content, _contentPosition, _elementH, _mouseDragDropScrolling, _mouseWheelScrolling, _scrollOffsetY;
           _blenderTop = $('<div>').addClass('blender blender-top veil').appendTo(element);
           _blenderBtm = $('<div>').addClass('blender blender-btm').appendTo(element);
           _elementH = 0;
@@ -353,24 +505,24 @@
               status = false;
             }
             if (status === true) {
-              mouseWheelScrolling();
-              return mouseDragDropScrolling();
+              _mouseWheelScrolling();
+              return _mouseDragDropScrolling();
             } else {
               element.unbind('mousewheel mouseenter mouseleave');
               return _content.css('y', limits.top);
             }
           };
-          mouseWheelScrolling = function() {
+          _mouseWheelScrolling = function() {
             return element.mousewheel(function(event, delta, deltaX, deltaY) {
               var y;
               event.preventDefault;
               event.stopPropagation;
               y = parseInt(_content.css('y'), 10) + (delta * 20);
-              contentPosition(y);
+              _contentPosition(y);
               return false;
             });
           };
-          contentPosition = function(y, ani) {
+          _contentPosition = function(y, ani) {
             if (ani == null) {
               ani = false;
             }
@@ -393,7 +545,7 @@
             }
             return scrollerCtrl.setPos(y);
           };
-          mouseDragDropScrolling = function() {
+          _mouseDragDropScrolling = function() {
             return element.mouseenter(function(event) {
               event.preventDefault;
               event.stopPropagation;
@@ -416,19 +568,15 @@
             }, false);
           }
           if (attrs.onElementChange != null) {
-            scope.$watch(attrs.onElementChange, function(newVal, oldVal) {
+            return scope.$watch(attrs.onElementChange, function(newVal, oldVal) {
               var y;
               if (newVal === oldVal) {
                 return;
               }
               y = -(_elementH * newVal) + _scrollOffsetY;
-              return contentPosition(y, true);
+              return _contentPosition(y, true);
             }, false);
           }
-          console.log(scope);
-          return scope.$watch(scope.thumbsAni, function(vnew, vold) {
-            return console.log(vnew, vold);
-          });
         }
       };
     }
@@ -473,11 +621,10 @@
           return element.bind('dragenter dragover', false).bind('drop', function(event) {
             event.preventDefault();
             event.stopPropagation();
-            $.each(event.dataTransfer.files, function(index, file) {
+            return $.each(event.dataTransfer.files, function(index, file) {
               var fr;
               fr = new FileReader();
               fr.onload = function(file) {
-                return console.log(file);
                 /*
                 					(event) ->
                 						element.append( $('<img>').attr('src'))
@@ -486,7 +633,6 @@
               };
               return fr.readAsDataURL(file);
             });
-            return console.log(event.dataTransfer.files);
           });
         }
       };
