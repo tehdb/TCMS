@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"web",
+				"webkit-animation-delay"
+			],
+			[
+				"webkit-ani",
+				"webkit-animation-duration"
+			],
+			[
+				"scroller",
+				"scrollerCtrl"
+			],
+			[
+				"text",
+				"text-center"
+			],
+			[
+				"ble",
+				"blenderTop"
+			],
+			[
+				"eleme",
+				"elementPaddingBtm"
+			],
+			[
+				"ele",
+				"elementPaddingTop"
+			],
+			[
 				"trans",
 				"translateX"
 			],
@@ -23,7 +51,7 @@
 			"file": "views/gallery.jade",
 			"settings":
 			{
-				"buffer_size": 1832,
+				"buffer_size": 2970,
 				"line_ending": "Unix"
 			}
 		},
@@ -31,7 +59,7 @@
 			"file": "client_src/coffee/directives.coffee",
 			"settings":
 			{
-				"buffer_size": 3084,
+				"buffer_size": 4904,
 				"line_ending": "Unix"
 			}
 		},
@@ -39,7 +67,7 @@
 			"file": "client_src/coffee/controllers.coffee",
 			"settings":
 			{
-				"buffer_size": 1493,
+				"buffer_size": 1712,
 				"line_ending": "Unix"
 			}
 		},
@@ -63,7 +91,31 @@
 			"file": "client_src/sass/main.sass",
 			"settings":
 			{
-				"buffer_size": 3611,
+				"buffer_size": 6863,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client_src/coffee/gallery-app.coffee",
+			"settings":
+			{
+				"buffer_size": 167,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "db.coffee",
+			"settings":
+			{
+				"buffer_size": 3423,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "README",
+			"settings":
+			{
+				"buffer_size": 379,
 				"line_ending": "Unix"
 			}
 		}
@@ -104,6 +156,8 @@
 	},
 	"file_history":
 	[
+		"/home/tehdb/Projects/TCMS/README",
+		"/run/user/1000/gvfs/smb-share:server=rt-n66u,share=my_book/Tutorials/CSS/Tuts+. CSS3 Animations/1. Animating with CSS3/11. Animation Keyframes.mp4",
 		"/home/tehdb/Projects/TCMS/public/js/app.js",
 		"/home/tehdb/Projects/TCMS/public/js/main.js",
 		"/home/tehdb/Projects/TCMS/node_modules/grunt-contrib-watch/node_modules/tiny-lr/node_modules/qs/test/browser/jquery.js",
@@ -117,7 +171,6 @@
 		"/home/tehdb/Projects/TCMS/db.coffee",
 		"/home/tehdb/Projects/TCMS/views/layout.jade",
 		"/home/tehdb/Projects/TCMS/client_src/coffee/main.coffee",
-		"/home/tehdb/Projects/TCMS/README",
 		"/home/tehdb/Projects/TCMS/public/css/main.css",
 		"/home/tehdb/Projects/TCMS/client_src/sass/normalize.scss",
 		"/home/tehdb/Tools/pixastic-lib.latest/license.txt",
@@ -142,6 +195,23 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"veil",
+			"galleryIndex",
+			"progress",
+			"%\n",
+			"$blenderBtm",
+			"$blenderTop",
+			"$element",
+			"element",
+			" $element",
+			"$element",
+			"element",
+			" $element",
+			"$element",
+			"$scroller",
+			"single-box",
+			"->\n",
+			"scope.background",
 			"mouseWeelScroll",
 			")\n",
 			"mouseWeelScroll",
@@ -189,15 +259,15 @@
 					"file": "views/gallery.jade",
 					"settings":
 					{
-						"buffer_size": 1832,
+						"buffer_size": 2970,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								568,
-								568
+								910,
+								910
 							]
 						],
 						"settings":
@@ -206,7 +276,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 153.0,
+						"translation.y": 204.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -216,15 +286,15 @@
 					"file": "client_src/coffee/directives.coffee",
 					"settings":
 					{
-						"buffer_size": 3084,
+						"buffer_size": 4904,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2113,
-								2113
+								4028,
+								4028
 							]
 						],
 						"settings":
@@ -233,7 +303,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1020.0,
+						"translation.y": 2856.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -243,15 +313,27 @@
 					"file": "client_src/coffee/controllers.coffee",
 					"settings":
 					{
-						"buffer_size": 1493,
+						"buffer_size": 1712,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1283,
-								1283
+								123,
+								123
+							],
+							[
+								613,
+								613
+							],
+							[
+								643,
+								643
+							],
+							[
+								842,
+								842
 							]
 						],
 						"settings":
@@ -324,15 +406,15 @@
 					"file": "client_src/sass/main.sass",
 					"settings":
 					{
-						"buffer_size": 3611,
+						"buffer_size": 6863,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2888,
-								2888
+								3125,
+								3125
 							]
 						],
 						"settings":
@@ -341,7 +423,86 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2778.0,
+						"translation.y": 459.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "client_src/coffee/gallery-app.coffee",
+					"settings":
+					{
+						"buffer_size": 167,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								119,
+								119
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "db.coffee",
+					"settings":
+					{
+						"buffer_size": 3423,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								157,
+								157
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CoffeeScript/CoffeeScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "README",
+					"settings":
+					{
+						"buffer_size": 379,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								379,
+								379
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -390,6 +551,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"read",
+				"README"
+			],
 			[
 				"controllers",
 				"client_src/coffee/controllers.coffee"

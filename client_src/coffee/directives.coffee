@@ -212,10 +212,6 @@ app.directive "dropzone", ['settings', (settings) ->
 
 				fr.readAsDataURL( file )
 			)
-			console.log( event.dataTransfer.files )
-
-
-
 		)
 ]
 
