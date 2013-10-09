@@ -39,13 +39,31 @@ app.directive "imgsList", ->
 	]
 
 
+app.directive "vsliderContent", ['$timeout', (timeout) ->
+	restrict: 'A'
+	scope : true
+	require : "^vslider"
+	link : (scope, element, attrs, vs ) ->
+		if attrs.vsliderContent?
+			scope.$watch( attrs.vsliderContent, (nv, ov) ->
+				return if nv is ov
+				console.log( element.actual('height'), element.height() )
+				timeout(->
+					console.log( element.actual('height'), element.height() )
+					vs.contentReady(element)
+				, 400)
+			, false )
+]
+
+
+
 
 app.directive "vslider", ->
 	restrict: 'A'
 	scope : true
 	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
 		_limits = {top:0, btm: 0, fac:1}
-		_mouseWheelDeltaFactor = 1
+		_mouseWheelDeltaFactor = 20 
 		_content = null
 		_scroller = $('<div>').appendTo( element )
 		_blenderTop = $('<div>').addClass('blenderTop veil').appendTo( element )
@@ -128,7 +146,7 @@ app.directive "vslider", ->
 
 		#************************************************************
 		#** public ************************************************* 
-		scope.contentReady = ( contentObj )->
+		this.contentReady = ( contentObj )->
 			_content = contentObj
 			_setLimits()		
 			

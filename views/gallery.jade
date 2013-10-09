@@ -12,25 +12,20 @@ block content
 		div.sidebarRight.vslider(
 			vslider,
 			vslider-scroller="right"
-
 		)
 			ul.thumbs(
-				imgs-list,
-				imgs-list-size="{{mediaElements.length}}",
-				imgs-list-ready="contentReady(element)"
-			)
-
+					vslider-content="mels"
+				)
 				li.thumb(
-					ng-repeat="me in mediaElements",
+					ng-repeat="me in mels",
 					ng-class="{'active': $index == mediaElementIndex}",
-					ng-click="showMediaElement($index)"
 				)
 					div.title {{me.title}}
-					img( 
-						img-loaded="onImgLoaded()",
-						ng-src="{{gallery.path}}thumbs/{{me.thumb}}", 
+					img(
+						ng-src="{{me.thumbSrc}}"
 						alt="{{me.title}}"
 					)
+					
 
 		//----------------------------------------------------------------------
 		//-- galleries ---------------------------------------------------------
@@ -39,11 +34,7 @@ block content
 			vslider-scroller="left"
 		)
 
-			ul.galleries(
-				imgs-list,
-				imgs-list-size="{{album.galleries.length}}",
-				imgs-list-ready="contentReady(element)"
-			)
+			ul.galleries
 				li.gallery(
 					ng-repeat="g in album.galleries",
 					ng-class="{'active': $index == galleryIndex}"
@@ -54,10 +45,10 @@ block content
 						//- ,&nbsp;
 						//- span.glyphicon.glyphicon-picture &nbsp;{{g.elements.length}}
 					div.title {{g.title}}
-					img(
-						img-loaded="onImgLoaded()",
-						ng-src="{{g.path}}thumbs/{{g.elements[g.cover].thumb}}",
-						alt="{{e.title}}")
+					//- img(
+					//- 	img-loaded="onImgLoaded()",
+					//- 	ng-src="{{g.path}}thumbs/{{g.elements[g.cover].thumb}}",
+					//- 	alt="{{e.title}}")
 
 		//----------------------------------------------------------------------
 		//-- stage -------------------------------------------------------------

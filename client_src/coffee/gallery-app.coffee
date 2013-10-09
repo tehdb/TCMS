@@ -4,5 +4,6 @@ app.constant('settings', {
 	dynamicBackground : false
 	slideshowDur : 5
 	galleriesShow : true
-	thumbnailsShow : true
+	thumbsShow : true
+	thumbnsPath : 'thumbs/'
 })

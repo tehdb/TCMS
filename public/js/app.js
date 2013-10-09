@@ -7,7 +7,8 @@
     dynamicBackground: false,
     slideshowDur: 5,
     galleriesShow: true,
-    thumbnailsShow: true
+    thumbsShow: true,
+    thumbnsPath: 'thumbs/'
   });
 
   app.service("AlbumService", [
@@ -82,15 +83,71 @@
   ]);
 
   app.controller("GalleryCtrl", [
-    "$scope", "$timeout", "AlbumService", 'settings', function(scope, timeout, as, settings) {
+    "$scope", "$timeout", "AlbumService", 'settings', function(scope, timeout, as, sttgs) {
+      var _preloadThumbs, _prepareData, _setData;
       scope.galleryIndex = 0;
       scope.mediaElementIndex = 0;
       as.getAlbum(1, function(data) {
-        scope.album = data;
-        scope.gallery = scope.album.galleries[scope.galleryIndex];
-        scope.mediaElements = scope.gallery.elements;
-        return scope.mediaElement = scope.mediaElements[scope.mediaElementIndex];
+        return _prepareData(data);
+        /*
+        		scope.album = data
+        		scope.gallery = scope.album.galleries[scope.galleryIndex]
+        		scope.mediaElements = scope.gallery.elements
+        		scope.mediaElement = scope.mediaElements[scope.mediaElementIndex]
+        */
+
       });
+      _prepareData = function(data) {
+        var album, el, elements, gallery, img, index, path, thumbsCount, thumbsLoaded, _i, _len, _results;
+        album = data;
+        gallery = album.galleries[scope.galleryIndex];
+        elements = gallery.elements;
+        path = gallery.path + sttgs.thumbnsPath;
+        thumbsCount = elements.length;
+        thumbsLoaded = 0;
+        _results = [];
+        for (index = _i = 0, _len = elements.length; _i < _len; index = ++_i) {
+          el = elements[index];
+          img = new Image();
+          img.onload = function() {
+            console.log(this.src, "loaded");
+            if (++thumbsLoaded >= thumbsCount) {
+              return _setData({
+                gallery: gallery,
+                elements: elements
+              });
+            }
+          };
+          img.src = path + el.thumb;
+          elements[index].thumbSrc = img.src;
+          _results.push(elements[index].thumbImgObj = img);
+        }
+        return _results;
+      };
+      _setData = function(data) {
+        return scope.$apply(function() {
+          scope.gallery = data.gallery;
+          return scope.mels = data.elements;
+        });
+      };
+      _preloadThumbs = function(els, path) {
+        var el, img, index, thumbsCount, thumbsLoaded, _i, _len, _results;
+        thumbsCount = els.length;
+        thumbsLoaded = 0;
+        _results = [];
+        for (index = _i = 0, _len = els.length; _i < _len; index = ++_i) {
+          el = els[index];
+          img = new Image();
+          img.onload = function() {
+            if (++thumbsLoaded >= thumbsCount) {
+              return console.log("thumbs loaded");
+            }
+          };
+          img.src = path + el.thumb;
+          _results.push(el.thumbImgObj = img);
+        }
+        return _results;
+      };
       scope.showGallery = function(index) {
         scope.galleryIndex = index;
         scope.gallery = scope.album.galleries[scope.galleryIndex];
@@ -107,7 +164,7 @@
         }
       };
     }
-  ]);
+  ]).resolve = {};
 
   app.directive("imgLoaded", function() {
     return {
@@ -151,6 +208,30 @@
     };
   });
 
+  app.directive("vsliderContent", [
+    '$timeout', function(timeout) {
+      return {
+        restrict: 'A',
+        scope: true,
+        require: "^vslider",
+        link: function(scope, element, attrs, vs) {
+          if (attrs.vsliderContent != null) {
+            return scope.$watch(attrs.vsliderContent, function(nv, ov) {
+              if (nv === ov) {
+                return;
+              }
+              console.log(element.actual('height'), element.height());
+              return timeout(function() {
+                console.log(element.actual('height'), element.height());
+                return vs.contentReady(element);
+              }, 400);
+            }, false);
+          }
+        }
+      };
+    }
+  ]);
+
   app.directive("vslider", function() {
     return {
       restrict: 'A',
@@ -163,7 +244,7 @@
             btm: 0,
             fac: 1
           };
-          _mouseWheelDeltaFactor = 1;
+          _mouseWheelDeltaFactor = 20;
           _content = null;
           _scroller = $('<div>').appendTo(element);
           _blenderTop = $('<div>').addClass('blenderTop veil').appendTo(element);
@@ -244,7 +325,7 @@
               return _scroller.removeClass('active');
             });
           };
-          return scope.contentReady = function(contentObj) {
+          return this.contentReady = function(contentObj) {
             _content = contentObj;
             return _setLimits();
           };
@@ -252,39 +333,5 @@
       ]
     };
   });
-
-  /*
-  app.directive "sliderElement", ->
-  	restrict: 'A'
-  	scope : true
-  	require : ['?^sliderContent']
-  	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
-  		this.imgLoaded = ( imgObj ) ->
-  			scope.sliderContentCtrl.elementReady({
-  				width : element.height()
-  				height : element.width()
-  			})
-  
-  	]
-  
-  	link : (scope, element, attrs, ctrls) -> 
-    		scope.sliderContentCtrl = ctrls[0] if ctrls[0]?
-  
-  
-  app.directive "sliderContent", ->
-  	restrict: 'A'
-  	scope : true
-  	require : ['?^slider']
-  	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
-  		_elsData = []
-  		
-  		this.elementReady = (elData) ->
-  			_elsData.push ( elData )
-  
-  	link : (scope, element, attrs, ctrls ) ->
-  		if _elsData.length is scope.elements.length
-  				ctrls[0].setContentProps( _elsData ) if ctrls[0]?
-  */
-
 
 }).call(this);
