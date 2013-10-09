@@ -1,0 +1,365 @@
+//@import "compass/reset"
+@import "compass/css3/box-shadow"
+@import "compass/css3/images"
+@import "compass/css3/transform"
+@import "compass/css3/transition"
+
+$maincolor : red
+
+$primaryH : 450px
+
+$pnlW : 154px
+
+$mainBGColor : rgba(255,255,255, 1)
+$mainBorderColor : rgba(0,0,0,0.15)
+
+
+
+h1
+	border-bottom: 1px solid $maincolor
+	color : $maincolor
+	padding-bottom: 4px
+
+
+.T-gallery
+	background : $mainBGColor
+	position : relative
+	+single-transition( $property:all, $duration:0.3s, $function:linear )
+
+	.primary
+		height : $primaryH 
+		overflow: hidden
+		//+single-box-shadow( $color:gray, $hoff:0, $voff:0, $blur:2px )
+		border-top: 1px solid $mainBorderColor
+		border-bottom: 1px solid $mainBorderColor
+
+	.secondary
+		background: transparent
+		//text-shadow: 0 0 7px black
+		
+		margin-left: 0
+		margin-right: 0
+		padding-top: 5px
+		padding-bottom: 5px
+		position : relative
+		// border-left: 1px solid $mainBorderColor
+		// border-right: 1px solid $mainBorderColor
+		// border-bottom: 1px solid $mainBorderColor
+		//+single-box-shadow( $color:gray, $hoff:0, $voff:0, $blur:2px )
+		.badge
+			position : absolute
+			right : 12px
+			top : 12px
+
+		.label
+			font-size : 1em
+
+		.progress 
+			width : 190px
+			margin : 5px auto
+			height : 5px
+			position : relative
+			opacity : 1
+
+			+single-transition( $property:opacity, $duration:0.3s, $function:linear )
+			
+			&.veil
+				opacity : 0
+			.progress-bar
+				+single-transition( $property: none, $duration : 0)
+
+
+	.galleries
+		list-style: none
+		margin: 0
+		padding: 0
+		position: relative
+
+		.gallery
+			cursor : pointer
+			margin : 10px 0
+			padding: 0
+			position: relative
+
+			&:first-child
+				margin-top: 0
+
+			&:last-child
+				margin-bottom : 0
+
+			.title
+				background: rgba(255,255,255, 0.5)
+				bottom: 10px
+				color: white
+				padding: 5px 10px
+				position: absolute
+				right: 0
+				text-shadow: 0 0 7px #333
+				z-index: 1001
+				opacity : 0
+				+single-transition( $property:all, $duration:0.15s, $function:linear )
+				+simple-transform( $trans-x : -$pnlW )
+	
+			.count
+				background: rgba(255,255,255, 0.5)
+				top: 5px
+				color: white
+				padding: 4px 10px 5px 10px
+				position: absolute
+				left: 0
+				font-size: 12px
+				line-height: 12px
+				text-shadow: 0 0 7px #333
+				z-index: 1001
+				opacity : 0
+				word-spacing: -7px
+				+single-transition( $property:all, $duration:0.15s, $function:linear )
+				+simple-transform( $trans-y : -20px)
+
+			img 
+				width : 130px
+				margin: 0
+				padding: 0
+				position: relative
+				z-index: 1000
+				opacity : 1
+				+single-transition( $property:all, $duration:0.15s, $function:linear )
+
+			&:hover
+				.count
+					opacity : 1
+					+simple-transform( $trans-y : 0)
+
+				.title
+					opacity : 1
+					+simple-transform( $trans-x : 6px )
+
+				img
+					+simple-transform( $scale :1.05, $trans-x : 3px )
+
+			&.active
+				.title
+					opacity : 1
+					+simple-transform( $trans-x : 9px )
+
+				.count
+					opacity : 1				
+					+simple-transform( $trans-y : 0)
+				img
+					+simple-transform( $scale :1.07, $trans-x : 4px )
+
+
+	.thumbs
+		list-style : none
+		margin : 0
+		padding : 0
+
+		.thumb
+			cursor : pointer
+			margin : 10px 0
+			padding : 0
+			position : relative
+			opacity : 1
+			// +simple-transform( $trans-x : 0 )
+			// +single-transition( $property:all, $duration:0.15s, $function:linear )
+
+			
+			// &.veil
+			// 	opacity : 0
+			// 	+simple-transform( $trans-x : 10px )
+			
+
+			&:first-child
+				margin-top: 0
+
+			&:last-child
+				margin-bottom : 0
+
+			.title
+				background: rgba(255,255,255, 0.5)
+				bottom: 10px
+				color: white
+				padding: 5px 10px
+				position: absolute
+				left: 0
+				text-shadow: 0 0 7px #333
+				z-index: 1001
+				opacity : 0
+				+single-transition( $property:all, $duration:0.15s, $function:linear )
+				+simple-transform( $trans-x : $pnlW )
+
+			img 
+				margin: 0
+				padding: 0
+				width : 130px
+				+single-transition( $property:all, $duration:0.15s, $function:linear )
+
+			&:hover
+				.title
+					opacity : 1
+					+simple-transform( $trans-x : -6px )
+
+				img
+					+simple-transform( $scale :1.05, $trans-x : -3px )
+
+			&.active
+				.title
+					opacity : 1
+					+simple-transform( $trans-x : -9px )
+
+				img
+					+simple-transform( $scale :1.07, $trans-x : -4px )
+
+
+
+
+	.stage
+		background: transparent
+		line-height: $primaryH
+		overflow: hidden
+		position: relative
+		text-align: center
+		z-index: 1000
+
+		img
+			max-height: 100%
+			max-width: 100%
+			opacity : 1
+			+single-transition( $property:all, $duration:0.3s, $function:linear )
+
+			&.veil
+				opacity: 0
+
+	
+	.vpane
+		border-radius: none
+		color : white
+		height: $primaryH 
+		margin: 0
+		overflow: hidden
+		padding: 0
+		width : $pnlW
+		z-index: 1001
+		+single-transition( $property:all, $duration:0.3s, $function:linear )
+
+		.toggle
+			position: absolute
+			top: 48px
+
+		li
+			opacity : 1
+			+single-transition( $property:all, $duration:0.3s, $function:linear )
+			+translateX( $trans-x : 0)
+
+			&.veil
+				opacity : 0
+
+
+		&.vpane-left
+			float: left
+
+
+		&.vpane-right
+			float: right
+
+
+	$hPadding : 12px
+	$vPadding : 10px
+	$vpaneW : $pnlW
+	$blenderH : 20px
+
+	.slideRight,
+	.slideLeft
+
+		display : block!important
+		opacity : 1
+		padding : $vPadding $hPadding
+		width : $vpaneW
+		+translateX( $trans-x : 0 )
+		+single-transition( $property:all, $duration:0.3s, $function:linear )
+	
+		&.ng-hide
+			display: none
+			opacity : 0
+			padding-left: 0
+			padding-right: 0
+			width : 0
+			+translateX( $trans-x : -$vpaneW - $hPadding )
+
+	.slideLeft
+		&.ng-hide
+			+translateX( $trans-x : $vpaneW + $hPadding )
+
+	.slider
+		position : relative
+		
+		.scroller
+			position : absolute
+			right : 4px
+			top : 0
+			width : 4px
+			height : 0
+			background : white
+			opacity : 1
+			+single-transition( $property:opacity, $duration:0.2s, $function:linear )
+			+single-box-shadow( $color:gray, $hoff:0, $voff:0, $blur:4px )
+
+			&.veil
+				opacity : 0
+	
+		.blender
+			position : absolute
+			right : $hPadding
+			height : $blenderH
+			width : $vpaneW - $hPadding
+			background : black
+			opacity : 1
+			+single-transition( $property:opacity, $duration:0.2s, $function:linear )
+			&.veil
+				opacity : 0
+
+			&.blender-top
+				top : 0
+				+background( linear-gradient( $mainBGColor $vPadding, rgba(255,255,255,0) ) )
+			&.blender-btm
+				bottom : 0
+				+background( linear-gradient( rgba(255,255,255,0) 0, $mainBGColor $blenderH - $vPadding ) )
+
+		
+
+
+
+// .btn
+// 	font-weight : normal
+// 	overflow : hidden
+// 	+single-transition( $property:all, $duration:0.1s, $function:linear )
+	
+// 	.default
+// 		+single-transition( $property:all, $duration:0.3s, $function:linear )
+
+// 	.hover		
+// 		margin-top: -20px
+// 		+translateY( $trans-y : -40px )
+// 		+single-transition( $property:all, $duration:0.3s, $function:linear )
+
+// 	&:hover
+// 		background-color : #f1f1f1
+
+// 		.default
+// 			+translateY( $trans-y : 40px )
+
+// 		.hover
+// 			+translateY( $trans-y : 0 )
+
+
+// 	&:focus
+// 		background-color : #fff
+
+// 	&:active
+// 		background-color : #f1f1f1
+// 		+scale( $scale-x:0.94, $scale-y:0.94 )
+
+// 	&.active
+// 		background-color : #f1f1f1
+// 		+single-box-shadow( $color:gray, $hoff:0, $voff:0, $blur:4px, $spread:2px, $inset:inset )
+

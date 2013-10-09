@@ -1,0 +1,131 @@
+extends layout
+
+block content
+	h1= title
+
+	div.T-gallery(
+		ng-app="TGallery", 
+		ng-controller="GalleryCtrl", 
+		dynamic-background="background"
+	)			
+
+		div.primary
+			div.vpane.vpane-left.slideRight(
+				slider="reveal",
+				slider-depend="album.galleries",
+				ng-show="gallsShow"
+			)
+				ul.galleries
+					li.gallery(
+						ng-repeat="g in album.galleries", 
+						ng-click="switchGallery($index)"
+						ng-class="{'active': $index == galleryIndex}"
+					)
+						div.count
+							span.glyphicon.glyphicon-picture &nbsp;{{g.elements.length}}
+							//- ,&nbsp;
+							//- span.glyphicon.glyphicon-picture &nbsp;{{g.elements.length}}
+						div.title {{g.title}}
+						img(
+							ng-src="{{g.path}}thumbs/{{g.elements[g.cover].thumb}}",
+							alt="{{e.title}}")
+
+			div.vpane.vpane-right.slider.slideLeft(
+				slider="reveal",
+				slider-depend="thumbsLoaded",
+				on-gallery-change="thumbsLoaded"
+				on-element-change="elementIndex"
+				ng-show="thumbsShow",
+				scroller
+				dropzone
+			)
+				ul.thumbs(
+					slider-content="thumbsLoaded"
+				)
+					li.thumb(
+						ng-repeat="e in elements",
+						ng-click="switchImage($index)"
+						ng-class="{'active': $index == elementIndex}"
+						slider-element="switchGalleryProc"
+						slider-element-index="{{$index}}"
+						slider-element-count="{{elements.length}}"
+					)
+						div.title {{e.title}}
+						img(
+							image-on-load="onThumbLoaded()", 
+							ng-src="{{gallery.path}}thumbs/{{e.thumb}}", 
+							alt="{{e.title}}"
+						)
+					
+
+			div.stage
+				img.veil(
+					stage-img,
+					ng-src="{{gallery.path}}{{image.file}}",
+					alt="{{image.title}}"
+				)
+
+		div.hpane.hpane-bottom.row.secondary
+				div.text-center
+					div.btn-group
+						button.btn.btn-default(
+							type="button",
+							ng-class="{'btn-primary': gallsShow}",
+							ng-click="gallsShow=!gallsShow"
+							title="show/hide galleries"
+						)
+							span.glyphicon.glyphicon-book
+							
+						button.btn.btn-default(
+							type="button", 
+							ng-click="prevImage()"
+							title="show previouse image"
+						)
+							span.glyphicon.glyphicon-step-backward
+						
+						button.btn.btn-default(
+							type="button"
+							ng-click="slideshow = !slideshow"
+							title="start/stop slideshow"
+
+						)
+							span.glyphicon(
+								ng-class="{ 'glyphicon-play' : !slideshow, 'glyphicon-pause' : slideshow }"
+							)
+
+						button.btn.btn-default(
+							type="button",
+							ng-click="nextImage()"
+							title="show next image"
+						) 
+							span.glyphicon.glyphicon-step-forward
+
+						button.btn.btn-default(
+							type="button",
+							ng-class="{'btn-primary': thumbsShow}",
+							ng-click="thumbsShow=!thumbsShow",
+							title="show/hide thumbnails"
+						) 
+							span.glyphicon.glyphicon-picture
+
+						//- button.btn.btn-default
+						//- 	select.form-control
+						//- 		option(value="1") 1
+						//- 		option(value="2") 2
+						//- 		option(value="3") 3
+
+
+					div.progress(
+						ng-class="{'veil' : !slideshow}"
+					)
+						div.progress-bar( 
+							role="progressbar", 
+							aria-valuenow="60",
+							aria-valuemin="0",
+							aria-valuemax="100",
+							progressbar="slideshow"
+						)
+
+				span.badge {{elementIndex+1}} of {{elements.length}}
+
+

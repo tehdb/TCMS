@@ -83,259 +83,132 @@
 
   app.controller("GalleryCtrl", [
     "$scope", "$timeout", "AlbumService", 'settings', function(scope, timeout, as, settings) {
-      var thumbsLoadedCount;
-      scope.galleryIndex = -1;
-      scope.elementIndex = -1;
-      thumbsLoadedCount = 0;
-      scope.thumbsLoaded = false;
-      scope.gallsShow = settings.galleriesShow;
-      scope.thumbsShow = settings.thumbnailsShow;
-      scope.background = '';
-      scope.slideshow = false;
-      scope.switchGalleryProc = false;
-      scope.thumbsAni = false;
+      scope.galleryIndex = 0;
+      scope.mediaElementIndex = 0;
       as.getAlbum(1, function(data) {
         scope.album = data;
-        return scope.switchGallery(0);
+        scope.gallery = scope.album.galleries[scope.galleryIndex];
+        scope.mediaElements = scope.gallery.elements;
+        return scope.mediaElement = scope.mediaElements[scope.mediaElementIndex];
       });
-      scope.onThumbLoaded = function() {
-        thumbsLoadedCount++;
-        if (thumbsLoadedCount === scope.elements.length) {
-          return scope.thumbsLoaded = true;
+      scope.showGallery = function(index) {
+        scope.galleryIndex = index;
+        scope.gallery = scope.album.galleries[scope.galleryIndex];
+        scope.mediaElements = scope.gallery.elements;
+        return scope.showMediaElement(0);
+      };
+      scope.showMediaElement = function(index) {
+        scope.mediaElementIndex = index;
+        return scope.mediaElement = scope.mediaElements[scope.mediaElementIndex];
+      };
+      return scope.onStageImgLoaded = function(msg) {
+        if (msg == null) {
+          msg = 'default';
         }
       };
-      scope.switchGallery = function(id) {
-        if (scope.galleryIndex === id) {
-          return false;
-        }
-        scope.galleryIndex = id;
-        scope.elementIndex = -1;
-        thumbsLoadedCount = 0;
-        scope.thumbsLoaded = false;
-        scope.slideshow = false;
-        scope.switchGalleryProc = true;
-        return scope.switchImage(0, function() {
-          scope.gallery = scope.album.galleries[scope.galleryIndex];
-          scope.elements = scope.gallery.elements;
-          return scope.switchGalleryProc = false;
+    }
+  ]);
+
+  app.directive("imgLoaded", function() {
+    return {
+      restrict: 'A',
+      scope: true,
+      link: function(scope, element, attrs, ctrls) {
+        return element.unbind('load').bind('load', function(event) {
+          console.log(element.attr('alt'), 'loaded');
+          return scope.$eval(attrs.imgLoaded);
         });
-      };
-      scope.nextImage = function(slideshow) {
-        var id;
-        if (slideshow == null) {
-          slideshow = false;
-        }
-        id = scope.elementIndex + 1;
-        if (id > (scope.elements.length - 1)) {
-          id = 0;
-        }
-        scope.switchImage(id);
-        if (slideshow !== true) {
-          return scope.slideshow = false;
-        }
-      };
-      scope.prevImage = function(slideshow) {
-        var id;
-        if (slideshow == null) {
-          slideshow = false;
-        }
-        scope.slideshow = false;
-        id = scope.elementIndex - 1;
-        if (id < 0) {
-          id = scope.elements.length - 1;
-        }
-        return scope.switchImage(id);
-      };
-      scope.switchImage = function(id, callback) {
-        if (scope.elementIndex === id) {
-          return false;
-        }
-        scope.elementIndex = id;
-        scope.$image.addClass('veil');
-        return timeout(function() {
-          if (typeof callback === 'function') {
-            callback();
-          }
-          return scope.image = scope.elements[scope.elementIndex];
-        }, 300);
-      };
-      return scope.safeApply = function(fn) {
-        var phase;
-        phase = this.$root.$$phase;
-        if (phase === '$apply' || phase === '$digest') {
-          if (fn && (typeof fn === 'function')) {
-            return fn();
-          }
-        } else {
-          return scope.$apply(fn);
-        }
-      };
-    }
-  ]);
-
-  'use strict';
-
-  app.directive("dynamicBackground", function() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        if (attrs.dynamicBackground != null) {
-          return scope.$watch(attrs.dynamicBackground, function(newVal, oldVal) {
-            return $(element).css({
-              "background-color": newVal
-            });
-          }, false);
-        }
       }
     };
   });
 
-  app.directive("stageImg", [
-    'ImageService', 'settings', function(imgs, sttgs) {
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          scope.$image = element;
-          return scope.$watch(function() {
-            return scope.image;
-          }, function(newVal, oldVal) {
-            var colorPromise;
-            if (newVal === oldVal) {
-              return;
-            }
-            if (sttgs.dynamicBackground === true) {
-              colorPromise = imgs.getImageColor(scope.gallery.path + scope.image.file);
-              return colorPromise.then(function(color) {
-                scope.background = "rgb(" + color.join(',') + ")";
-                return element.removeClass('veil');
-              }, function(error) {
-                return element.removeClass('veil');
-              });
-            } else {
-              return element.removeClass('veil');
-            }
-          }, false);
-        }
-      };
-    }
-  ]);
-
-  app.directive("scroller", function() {
+  app.directive("imgsList", function() {
     return {
       restrict: 'A',
+      scope: true,
       controller: [
-        '$scope', function(scope) {
-          var _factor, _scroller, _topY;
-          _scroller = $('<div>').addClass('scroller veil');
-          _factor = 1;
-          _topY = 0;
-          scope.scroller = _scroller;
-          this.init = function(elementH, contentH, top) {
-            _factor = elementH / contentH;
-            _topY = top;
-            return _scroller.height(_factor * elementH).css('y', _topY);
+        '$scope', '$element', '$attrs', function(scope, element, attrs) {
+          var _imgCount, _imgLoaded, _onImgsLoaded;
+          _imgCount = 0;
+          _imgLoaded = 0;
+          attrs.$observe('imgsListSize', function(val) {
+            if (val) {
+              return _imgCount = parseInt(val, 10);
+            }
+          });
+          scope.onImgLoaded = function() {
+            if (++_imgLoaded >= _imgCount) {
+              _imgLoaded = 0;
+              return _onImgsLoaded();
+            }
           };
-          this.setPos = function(y) {
-            return _scroller.css('y', -y * _factor + _topY);
-          };
-          this.show = function() {
-            return _scroller.removeClass('veil');
-          };
-          return this.hide = function() {
-            return _scroller.addClass('veil');
+          return _onImgsLoaded = function() {
+            scope.element = element;
+            return scope.$eval(attrs.imgsListReady);
           };
         }
-      ],
-      link: function(scope, element, attrs) {
-        return scope.scroller.appendTo(element);
-      }
+      ]
     };
   });
 
-  app.directive("slider", [
-    '$timeout', function(timeout) {
-      return {
-        restrict: 'A',
-        require: '?scroller',
-        controller: [
-          '$scope', function(scope) {
-            return this.callMe = function() {
-              return scope.setLimits();
-            };
-          }
-        ],
-        link: function(scope, element, attrs, scrollerCtrl) {
-          var limits, _blenderBtm, _blenderTop, _content, _contentPosition, _elementH, _mouseDragDropScrolling, _mouseWheelScrolling, _scrollOffsetY, _scrolling, _setLimits;
-          _blenderTop = $('<div>').addClass('blender blender-top veil').appendTo(element);
-          _blenderBtm = $('<div>').addClass('blender blender-btm').appendTo(element);
-          _elementH = 0;
-          _scrollOffsetY = 0;
-          _content = element.find('ul').first();
-          limits = {
+  app.directive("vslider", function() {
+    return {
+      restrict: 'A',
+      scope: true,
+      controller: [
+        '$scope', '$element', '$attrs', function(scope, element, attrs) {
+          var _blenderBtm, _blenderTop, _content, _contentPosition, _limits, _mouseMoveScrolling, _mouseWheelDeltaFactor, _mouseWheelScrolling, _scroller, _scrolling, _setLimits;
+          _limits = {
             top: 0,
-            bottom: 0
+            btm: 0,
+            fac: 1
           };
-          scope.setLimits = function() {
-            return _setLimits();
-          };
+          _mouseWheelDeltaFactor = 1;
+          _content = null;
+          _scroller = $('<div>').appendTo(element);
+          _blenderTop = $('<div>').addClass('blenderTop veil').appendTo(element);
+          _blenderBtm = $('<div>').addClass('blenderBtm veil').appendTo(element);
+          if (attrs.vsliderScroller === 'left') {
+            _scroller.addClass('scrollerLeft');
+          } else {
+            _scroller.addClass('scrollerRight');
+          }
           _setLimits = function() {
-            limits = {
-              top: 0,
-              bottom: 0
-            };
-            return timeout(function() {
-              var containerH, contentH, elementPaddingBtm, elementPaddingTop;
-              _content = element.find('ul').first();
-              containerH = element.actual('outerHeight');
-              elementPaddingTop = parseInt(element.css('padding-top'), 10);
-              elementPaddingBtm = parseInt(element.css('padding-bottom'), 10);
-              containerH = containerH - elementPaddingTop - elementPaddingBtm;
-              contentH = _content.actual('outerHeight');
-              limits.bottom = containerH - contentH;
-              _elementH = element.find('li').first().actual('outerHeight', {
-                includeMargin: true
-              });
-              _scrollOffsetY = Math.round((containerH - _elementH) / 2);
-              _blenderTop.addClass('veil');
-              _blenderBtm.addClass('veil');
-              if (0 > limits.bottom) {
-                _scrolling(true);
-                scrollerCtrl.init(containerH, contentH, elementPaddingTop);
-                return _blenderBtm.removeClass('veil');
-              }
-            }, 500);
+            var ch, eh;
+            eh = element.actual('height');
+            ch = _content.actual('outerHeight', {
+              includeMargin: true
+            });
+            _limits.fac = eh / ch;
+            _limits.btm = eh - ch;
+            _scroller.height(_limits.fac * eh);
+            if (0 > _limits.btm) {
+              _blenderBtm.removeClass('veil');
+              return _scrolling(true);
+            }
           };
           _scrolling = function(status) {
             if (status == null) {
               status = false;
             }
-            if (status === true) {
+            console.log("scrolling");
+            if (status) {
               _mouseWheelScrolling();
-              return _mouseDragDropScrolling();
+              return _mouseMoveScrolling();
             } else {
               element.unbind('mousewheel mouseenter mouseleave');
-              return _content.css('y', limits.top);
+              return _content.css('y', _limits.top);
             }
-          };
-          _mouseWheelScrolling = function() {
-            return element.mousewheel(function(event, delta, deltaX, deltaY) {
-              var y;
-              event.preventDefault;
-              event.stopPropagation;
-              y = parseInt(_content.css('y'), 10) + (delta * 20);
-              _contentPosition(y);
-              return false;
-            });
           };
           _contentPosition = function(y, ani) {
             if (ani == null) {
               ani = false;
             }
-            if (y >= limits.top) {
-              y = limits.top;
+            if (y >= _limits.top) {
+              y = _limits.top;
               _blenderTop.addClass('veil');
-            } else if (y <= limits.bottom) {
-              y = limits.bottom;
+            } else if (y <= _limits.btm) {
+              y = _limits.btm;
               _blenderBtm.addClass('veil');
             } else {
               _blenderTop.removeClass('veil');
@@ -348,295 +221,70 @@
             } else {
               _content.css('y', y);
             }
-            return scrollerCtrl.setPos(y);
+            return _scroller.css('y', -y * _limits.fac);
           };
-          _mouseDragDropScrolling = function() {
-            return element.mouseenter(function(event) {
+          _mouseWheelScrolling = function() {
+            return element.mousewheel(function(event, delta, deltaX, deltaY) {
+              var y;
               event.preventDefault;
               event.stopPropagation;
-              return scrollerCtrl.show();
+              y = parseInt(_content.css('y'), 10) + (delta * _mouseWheelDeltaFactor);
+              _contentPosition(y);
+              return false;
+            });
+          };
+          _mouseMoveScrolling = function() {
+            return _scroller.mouseenter(function(event) {
+              event.preventDefault;
+              event.stopPropagation;
+              return _scroller.addClass('active');
             }).mouseleave(function(event) {
               event.preventDefault;
               event.stopPropagation;
-              return scrollerCtrl.hide();
+              return _scroller.removeClass('active');
             });
           };
-          /*
-          		if attrs.onGalleryChange?
-          			scope.$watch( attrs.onGalleryChange, (newVal, oldVal) ->
-          				return if newVal is oldVal
-          				console.log("change")
-          				_scrolling( false )
-          			, false )
-          */
-
-          if (attrs.onElementChange != null) {
-            return scope.$watch(attrs.onElementChange, function(newVal, oldVal) {
-              var y;
-              if (newVal === oldVal) {
-                return;
-              }
-              y = -(_elementH * newVal) + _scrollOffsetY;
-              return _contentPosition(y, true);
-            }, false);
-          }
+          return scope.contentReady = function(contentObj) {
+            _content = contentObj;
+            return _setLimits();
+          };
         }
-      };
-    }
-  ]);
-
-  app.directive("sliderContent", [
-    '$timeout', function(timeout) {
-      return {
-        restrict: 'A',
-        scope: true,
-        require: '^slider',
-        link: function(scope, element, attrs, sliderCtrl) {}
-      };
-    }
-  ]);
-
-  app.directive("imageOnLoad", function() {
-    return {
-      restrict: 'A',
-      scope: true,
-      link: function(scope, element, attrs) {
-        return element.bind('load', function() {
-          console.log(scope.elements.length);
-          return scope.$apply(attrs.imageOnLoad);
-        });
-      }
+      ]
     };
   });
 
-  app.directive("sliderElement", [
-    function() {
-      return {
-        restrict: 'A',
-        scope: true,
-        require: '^slider',
-        link: function(scope, element, attrs, sliderCtrl) {
-          var onChange;
-          onChange = function(val) {
-            var _count, _index;
-            _index = parseInt(attrs.sliderElementIndex, 10);
-            _count = parseInt(attrs.sliderElementCount, 10);
-            if (val) {
-              return element.transition({
-                opacity: 0,
-                x: 40,
-                delay: 100 * _index,
-                duration: 200
-              });
-            } else {
-              return element.transition({
-                opacity: 1,
-                x: 0,
-                delay: 100 * _index,
-                duration: 200,
-                onComplete: function() {
-                  if ((_index + 1) === _count) {
-                    return sliderCtrl.callMe();
-                  }
-                }
-              });
-            }
-          };
-          if (attrs.sliderElement != null) {
-            return scope.$watch(attrs.sliderElement, function(vnew, vold) {
-              return onChange(vnew);
-            }, false);
-          }
-        }
-      };
-    }
-  ]);
+  /*
+  app.directive "sliderElement", ->
+  	restrict: 'A'
+  	scope : true
+  	require : ['?^sliderContent']
+  	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+  		this.imgLoaded = ( imgObj ) ->
+  			scope.sliderContentCtrl.elementReady({
+  				width : element.height()
+  				height : element.width()
+  			})
+  
+  	]
+  
+  	link : (scope, element, attrs, ctrls) -> 
+    		scope.sliderContentCtrl = ctrls[0] if ctrls[0]?
+  
+  
+  app.directive "sliderContent", ->
+  	restrict: 'A'
+  	scope : true
+  	require : ['?^slider']
+  	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+  		_elsData = []
+  		
+  		this.elementReady = (elData) ->
+  			_elsData.push ( elData )
+  
+  	link : (scope, element, attrs, ctrls ) ->
+  		if _elsData.length is scope.elements.length
+  				ctrls[0].setContentProps( _elsData ) if ctrls[0]?
+  */
 
-  app.directive("slider2", [
-    '$timeout', function(timeout) {
-      return {
-        restrict: 'A',
-        require: '?scroller',
-        scope: true,
-        controller: [
-          '$scope', function(scope) {
-            return this.callMe = function() {};
-          }
-        ],
-        link: function(scope, element, attrs, scrollerCtrl) {
-          var limits, scrolling, setLimits, _blenderBtm, _blenderTop, _content, _contentPosition, _elementH, _mouseDragDropScrolling, _mouseWheelScrolling, _scrollOffsetY;
-          _blenderTop = $('<div>').addClass('blender blender-top veil').appendTo(element);
-          _blenderBtm = $('<div>').addClass('blender blender-btm').appendTo(element);
-          _elementH = 0;
-          _scrollOffsetY = 0;
-          _content = element.find('ul').first();
-          limits = {
-            top: 0,
-            bottom: 0
-          };
-          setLimits = function() {
-            limits = {
-              top: 0,
-              bottom: 0
-            };
-            return timeout(function() {
-              var containerH, contentH, elementPaddingBtm, elementPaddingTop;
-              containerH = element.actual('outerHeight');
-              elementPaddingTop = parseInt(element.css('padding-top'), 10);
-              elementPaddingBtm = parseInt(element.css('padding-bottom'), 10);
-              containerH = containerH - elementPaddingTop - elementPaddingBtm;
-              contentH = _content.actual('outerHeight');
-              limits.bottom = containerH - contentH;
-              _elementH = element.find('li').first().actual('outerHeight', {
-                includeMargin: true
-              });
-              _scrollOffsetY = Math.round((containerH - _elementH) / 2);
-              _blenderTop.addClass('veil');
-              _blenderBtm.addClass('veil');
-              if (0 > limits.bottom) {
-                scrolling(true);
-                scrollerCtrl.init(containerH, contentH, elementPaddingTop);
-                return _blenderBtm.removeClass('veil');
-              }
-            }, 400);
-          };
-          scrolling = function(status) {
-            if (status == null) {
-              status = false;
-            }
-            if (status === true) {
-              _mouseWheelScrolling();
-              return _mouseDragDropScrolling();
-            } else {
-              element.unbind('mousewheel mouseenter mouseleave');
-              return _content.css('y', limits.top);
-            }
-          };
-          _mouseWheelScrolling = function() {
-            return element.mousewheel(function(event, delta, deltaX, deltaY) {
-              var y;
-              event.preventDefault;
-              event.stopPropagation;
-              y = parseInt(_content.css('y'), 10) + (delta * 20);
-              _contentPosition(y);
-              return false;
-            });
-          };
-          _contentPosition = function(y, ani) {
-            if (ani == null) {
-              ani = false;
-            }
-            if (y >= limits.top) {
-              y = limits.top;
-              _blenderTop.addClass('veil');
-            } else if (y <= limits.bottom) {
-              y = limits.bottom;
-              _blenderBtm.addClass('veil');
-            } else {
-              _blenderTop.removeClass('veil');
-              _blenderBtm.removeClass('veil');
-            }
-            if (ani) {
-              _content.transition({
-                'y': y
-              });
-            } else {
-              _content.css('y', y);
-            }
-            return scrollerCtrl.setPos(y);
-          };
-          _mouseDragDropScrolling = function() {
-            return element.mouseenter(function(event) {
-              event.preventDefault;
-              event.stopPropagation;
-              return scrollerCtrl.show();
-            }).mouseleave(function(event) {
-              event.preventDefault;
-              event.stopPropagation;
-              return scrollerCtrl.hide();
-            });
-          };
-          if (attrs.onGalleryChange != null) {
-            scope.$watch(attrs.onGalleryChange, function(newVal, oldVal) {
-              if (newVal === oldVal) {
-                return;
-              }
-              scrolling(false);
-              if (newVal === true) {
-                return setLimits();
-              }
-            }, false);
-          }
-          if (attrs.onElementChange != null) {
-            return scope.$watch(attrs.onElementChange, function(newVal, oldVal) {
-              var y;
-              if (newVal === oldVal) {
-                return;
-              }
-              y = -(_elementH * newVal) + _scrollOffsetY;
-              return _contentPosition(y, true);
-            }, false);
-          }
-        }
-      };
-    }
-  ]);
-
-  app.directive("progressbar", [
-    'settings', function(settings) {
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          var progressAni;
-          progressAni = function() {
-            return element.width(0).transition({
-              width: '100%'
-            }, settings.slideshowDur * 1000, 'linear', function() {
-              if (scope.slideshow) {
-                scope.nextImage(true);
-                return progressAni();
-              }
-            });
-          };
-          if (attrs.progressbar != null) {
-            return scope.$watch(attrs.progressbar, function(newVal, oldVal) {
-              if (newVal) {
-                return progressAni();
-              } else {
-                return element.stop().width(0);
-              }
-            }, false);
-          }
-        }
-      };
-    }
-  ]);
-
-  app.directive("dropzone", [
-    'settings', function(settings) {
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          $.event.props.push('dataTransfer');
-          return element.bind('dragenter dragover', false).bind('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            return $.each(event.dataTransfer.files, function(index, file) {
-              var fr;
-              fr = new FileReader();
-              fr.onload = function(file) {
-                /*
-                					(event) ->
-                						element.append( $('<img>').attr('src'))
-                */
-
-              };
-              return fr.readAsDataURL(file);
-            });
-          });
-        }
-      };
-    }
-  ]);
 
 }).call(this);
