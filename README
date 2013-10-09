@@ -11,9 +11,13 @@ check it :
 	http://browserify.org/
 
 
+<<<<<<< HEAD
 # github
 	git init
 	git add README.md
 	git commit -m "first commit"
 	git remote add origin https://github.com/tehdb/TCMS.git
 	git push -u origin master
+=======
+Dependencies											
+>>>>>>> f4be5e37d40ba7ae92b959633dda876371024c43

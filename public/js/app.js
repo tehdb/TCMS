@@ -5,7 +5,7 @@
 
   app.constant('settings', {
     dynamicBackground: false,
-    slideshowDur: 3,
+    slideshowDur: 5,
     galleriesShow: true,
     thumbnailsShow: true
   });
@@ -83,340 +83,208 @@
 
   app.controller("GalleryCtrl", [
     "$scope", "$timeout", "AlbumService", 'settings', function(scope, timeout, as, settings) {
-      var thumbsLoadedCount;
-      scope.galleryIndex = -1;
-      scope.elementIndex = -1;
-      thumbsLoadedCount = 0;
-      scope.thumbsLoaded = false;
-      scope.gallsShow = settings.galleriesShow;
-      scope.thumbsShow = settings.thumbnailsShow;
-      scope.background = '';
-      scope.slideshow = false;
+      scope.galleryIndex = 0;
+      scope.mediaElementIndex = 0;
       as.getAlbum(1, function(data) {
         scope.album = data;
-        return scope.switchGallery(0);
+        scope.gallery = scope.album.galleries[scope.galleryIndex];
+        scope.mediaElements = scope.gallery.elements;
+        return scope.mediaElement = scope.mediaElements[scope.mediaElementIndex];
       });
-      scope.onThumbLoaded = function() {
-        thumbsLoadedCount++;
-        if (thumbsLoadedCount === scope.elements.length) {
-          return scope.thumbsLoaded = true;
-        }
+      scope.showGallery = function(index) {
+        scope.galleryIndex = index;
+        scope.gallery = scope.album.galleries[scope.galleryIndex];
+        scope.mediaElements = scope.gallery.elements;
+        return scope.showMediaElement(0);
       };
-      scope.switchGallery = function(id) {
-        if (scope.galleryIndex === id) {
-          return false;
-        }
-        scope.galleryIndex = id;
-        scope.elementIndex = -1;
-        thumbsLoadedCount = 0;
-        scope.thumbsLoaded = false;
-        scope.slideshow = false;
-        return scope.switchImage(0, function() {
-          scope.gallery = scope.album.galleries[scope.galleryIndex];
-          return scope.elements = scope.gallery.elements;
-        });
+      scope.showMediaElement = function(index) {
+        scope.mediaElementIndex = index;
+        return scope.mediaElement = scope.mediaElements[scope.mediaElementIndex];
       };
-      scope.nextImage = function(slideshow) {
-        var id;
-        if (slideshow == null) {
-          slideshow = false;
-        }
-        if (slideshow !== true) {
-          scope.slideshow = false;
-        }
-        id = scope.elementIndex + 1;
-        if (id > (scope.elements.length - 1)) {
-          id = 0;
-        }
-        return scope.switchImage(id);
-      };
-      scope.prevImage = function() {
-        var id;
-        scope.slideshow = false;
-        id = scope.elementIndex - 1;
-        if (id < 0) {
-          id = scope.elements.length - 1;
-        }
-        return scope.switchImage(id);
-      };
-      scope.switchImage = function(id, callback) {
-        if (scope.elementIndex === id) {
-          return false;
-        }
-        scope.elementIndex = id;
-        scope.$image.addClass('veil');
-        return timeout(function() {
-          if (typeof callback === 'function') {
-            callback();
-          }
-          return scope.image = scope.elements[scope.elementIndex];
-        }, 300);
-      };
-      return scope.safeApply = function(fn) {
-        var phase;
-        phase = this.$root.$$phase;
-        if (phase === '$apply' || phase === '$digest') {
-          if (fn && (typeof fn === 'function')) {
-            return fn();
-          }
-        } else {
-          return scope.$apply(fn);
+      return scope.onStageImgLoaded = function(msg) {
+        if (msg == null) {
+          msg = 'default';
         }
       };
     }
   ]);
 
-  'use strict';
-
-  app.directive("dynamicBackground", function() {
+  app.directive("imgLoaded", function() {
     return {
       restrict: 'A',
-      link: function(scope, element, attrs) {
-        if (attrs.dynamicBackground != null) {
-          return scope.$watch(attrs.dynamicBackground, function(newVal, oldVal) {
-            return $(element).css({
-              "background-color": newVal
-            });
-          }, false);
-        }
-      }
-    };
-  });
-
-  app.directive("stageImg", [
-    'ImageService', 'settings', function(imgs, sttgs) {
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          scope.$image = element;
-          return scope.$watch(function() {
-            return scope.image;
-          }, function(newVal, oldVal) {
-            var colorPromise;
-            if (newVal === oldVal) {
-              return;
-            }
-            if (sttgs.dynamicBackground === true) {
-              colorPromise = imgs.getImageColor(scope.gallery.path + scope.image.file);
-              return colorPromise.then(function(color) {
-                scope.background = "rgb(" + color.join(',') + ")";
-                return element.removeClass('veil');
-              }, function(error) {
-                return element.removeClass('veil');
-              });
-            } else {
-              return element.removeClass('veil');
-            }
-          }, false);
-        }
-      };
-    }
-  ]);
-
-  app.directive("imageOnLoad", function() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        return element.bind('load', function() {
-          return scope.$apply(attrs.imageOnLoad);
+      scope: true,
+      link: function(scope, element, attrs, ctrls) {
+        return element.unbind('load').bind('load', function(event) {
+          console.log(element.attr('alt'), 'loaded');
+          return scope.$eval(attrs.imgLoaded);
         });
       }
     };
   });
 
-  app.directive("scroller", function() {
+  app.directive("imgsList", function() {
     return {
       restrict: 'A',
-      controller: function($scope) {
-        var _factor, _scroller, _topY;
-        _scroller = $('<div>').addClass('scroller veil');
-        _factor = 1;
-        _topY = 0;
-        $scope.scroller = _scroller;
-        this.init = function(elementH, contentH, top) {
-          _factor = elementH / contentH;
-          _topY = top;
-          return _scroller.height(_factor * elementH).css('y', _topY);
-        };
-        this.setPos = function(y) {
-          return _scroller.css('y', -y * _factor + _topY);
-        };
-        this.show = function() {
-          return _scroller.removeClass('veil');
-        };
-        return this.hide = function() {
-          return _scroller.addClass('veil');
-        };
-      },
-      link: function(scope, element, attrs) {
-        return scope.scroller.appendTo(element);
-      }
+      scope: true,
+      controller: [
+        '$scope', '$element', '$attrs', function(scope, element, attrs) {
+          var _imgCount, _imgLoaded, _onImgsLoaded;
+          _imgCount = 0;
+          _imgLoaded = 0;
+          attrs.$observe('imgsListSize', function(val) {
+            if (val) {
+              return _imgCount = parseInt(val, 10);
+            }
+          });
+          scope.onImgLoaded = function() {
+            if (++_imgLoaded >= _imgCount) {
+              _imgLoaded = 0;
+              return _onImgsLoaded();
+            }
+          };
+          return _onImgsLoaded = function() {
+            scope.element = element;
+            return scope.$eval(attrs.imgsListReady);
+          };
+        }
+      ]
     };
   });
 
-  app.directive("slider", [
-    '$timeout', function(timeout) {
-      return {
-        restrict: 'A',
-        require: '?scroller',
-        link: function(scope, element, attrs, scrollerCtrl) {
-          var $content, contentPosition, limits, mouseDragDropScrolling, mouseWheelScrolling, scrolling, setLimits, _blenderBtm, _blenderTop;
-          element = element;
-          _blenderTop = $('<div>').addClass('blender blender-top veil').appendTo(element);
-          _blenderBtm = $('<div>').addClass('blender blender-btm').appendTo(element);
-          $content = element.find('ul').first();
-          limits = {
+  app.directive("vslider", function() {
+    return {
+      restrict: 'A',
+      scope: true,
+      controller: [
+        '$scope', '$element', '$attrs', function(scope, element, attrs) {
+          var _blenderBtm, _blenderTop, _content, _contentPosition, _limits, _mouseMoveScrolling, _mouseWheelDeltaFactor, _mouseWheelScrolling, _scroller, _scrolling, _setLimits;
+          _limits = {
             top: 0,
-            bottom: 0
+            btm: 0,
+            fac: 1
           };
-          setLimits = function() {
-            limits = {
-              top: 0,
-              bottom: 0
-            };
-            return timeout(function() {
-              var contentH, elementH, elementPaddingBtm, elementPaddingTop;
-              elementH = element.actual('outerHeight');
-              elementPaddingTop = parseInt(element.css('padding-top'), 10);
-              elementPaddingBtm = parseInt(element.css('padding-bottom'), 10);
-              elementH = elementH - elementPaddingTop - elementPaddingBtm;
-              contentH = $content.actual('outerHeight');
-              limits.bottom = elementH - contentH;
-              _blenderTop.addClass('veil');
-              _blenderBtm.addClass('veil');
-              if (0 > limits.bottom) {
-                scrolling(true);
-                scrollerCtrl.init(elementH, contentH, elementPaddingTop);
-                return _blenderBtm.removeClass('veil');
-              }
-            }, 400);
+          _mouseWheelDeltaFactor = 1;
+          _content = null;
+          _scroller = $('<div>').appendTo(element);
+          _blenderTop = $('<div>').addClass('blenderTop veil').appendTo(element);
+          _blenderBtm = $('<div>').addClass('blenderBtm veil').appendTo(element);
+          if (attrs.vsliderScroller === 'left') {
+            _scroller.addClass('scrollerLeft');
+          } else {
+            _scroller.addClass('scrollerRight');
+          }
+          _setLimits = function() {
+            var ch, eh;
+            eh = element.actual('height');
+            ch = _content.actual('outerHeight', {
+              includeMargin: true
+            });
+            _limits.fac = eh / ch;
+            _limits.btm = eh - ch;
+            _scroller.height(_limits.fac * eh);
+            if (0 > _limits.btm) {
+              _blenderBtm.removeClass('veil');
+              return _scrolling(true);
+            }
           };
-          scrolling = function(status, elementH, contentH) {
+          _scrolling = function(status) {
             if (status == null) {
               status = false;
             }
-            if (elementH == null) {
-              elementH = 0;
-            }
-            if (contentH == null) {
-              contentH = 0;
-            }
-            if (status === true) {
-              mouseWheelScrolling();
-              return mouseDragDropScrolling();
+            console.log("scrolling");
+            if (status) {
+              _mouseWheelScrolling();
+              return _mouseMoveScrolling();
             } else {
               element.unbind('mousewheel mouseenter mouseleave');
-              return $content.css('y', limits.top);
+              return _content.css('y', _limits.top);
             }
           };
-          mouseWheelScrolling = function() {
-            return element.mousewheel(function(event, delta, deltaX, deltaY) {
-              var y;
-              event.preventDefault;
-              event.stopPropagation;
-              y = parseInt($content.css('y'), 10) + (delta * 20);
-              contentPosition(y);
-              return false;
-            });
-          };
-          contentPosition = function(y) {
-            if (y > limits.top) {
-              y = limits.top;
+          _contentPosition = function(y, ani) {
+            if (ani == null) {
+              ani = false;
+            }
+            if (y >= _limits.top) {
+              y = _limits.top;
               _blenderTop.addClass('veil');
-            } else if (y < limits.bottom) {
-              y = limits.bottom;
+            } else if (y <= _limits.btm) {
+              y = _limits.btm;
               _blenderBtm.addClass('veil');
             } else {
               _blenderTop.removeClass('veil');
               _blenderBtm.removeClass('veil');
             }
-            $content.css('y', y);
-            return scrollerCtrl.setPos(y);
+            if (ani) {
+              _content.transition({
+                'y': y
+              });
+            } else {
+              _content.css('y', y);
+            }
+            return _scroller.css('y', -y * _limits.fac);
           };
-          mouseDragDropScrolling = function() {
-            return element.mouseenter(function(event) {
+          _mouseWheelScrolling = function() {
+            return element.mousewheel(function(event, delta, deltaX, deltaY) {
+              var y;
               event.preventDefault;
               event.stopPropagation;
-              return scrollerCtrl.show();
+              y = parseInt(_content.css('y'), 10) + (delta * _mouseWheelDeltaFactor);
+              _contentPosition(y);
+              return false;
+            });
+          };
+          _mouseMoveScrolling = function() {
+            return _scroller.mouseenter(function(event) {
+              event.preventDefault;
+              event.stopPropagation;
+              return _scroller.addClass('active');
             }).mouseleave(function(event) {
               event.preventDefault;
               event.stopPropagation;
-              return scrollerCtrl.hide();
+              return _scroller.removeClass('active');
             });
           };
-          if (attrs.sliderDepend != null) {
-            return scope.$watch(attrs.sliderDepend, function(newVal, oldVal) {
-              if (newVal === oldVal) {
-                return;
-              }
-              scrolling(false);
-              if (newVal === true) {
-                return setLimits();
-              }
-            }, false);
-          }
-        }
-      };
-    }
-  ]);
-
-  app.directive("progressbar", [
-    'settings', function(settings) {
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          var progressAni;
-          progressAni = function() {
-            return element.width(0).animate({
-              width: '100%'
-            }, settings.slideshowDur * 1000, 'linear', function() {
-              if (scope.slideshow) {
-                scope.nextImage(true);
-                return progressAni();
-              }
-            });
+          return scope.contentReady = function(contentObj) {
+            _content = contentObj;
+            return _setLimits();
           };
-          if (attrs.progressbar != null) {
-            return scope.$watch(attrs.progressbar, function(newVal, oldVal) {
-              if (newVal) {
-                return progressAni();
-              } else {
-                return element.stop().width(0);
-              }
-            }, false);
-          }
         }
-      };
-    }
-  ]);
+      ]
+    };
+  });
 
-  app.directive("dropzone", [
-    'settings', function(settings) {
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          $.event.props.push('dataTransfer');
-          return element.bind('dragenter dragover', false).bind('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $.each(event.dataTransfer.files, function(index, file) {
-              var fr;
-              fr = new FileReader();
-              fr.onload = function(file) {
-                return console.log(file);
-                /*
-                					(event) ->
-                						element.append( $('<img>').attr('src'))
-                */
+  /*
+  app.directive "sliderElement", ->
+  	restrict: 'A'
+  	scope : true
+  	require : ['?^sliderContent']
+  	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+  		this.imgLoaded = ( imgObj ) ->
+  			scope.sliderContentCtrl.elementReady({
+  				width : element.height()
+  				height : element.width()
+  			})
+  
+  	]
+  
+  	link : (scope, element, attrs, ctrls) -> 
+    		scope.sliderContentCtrl = ctrls[0] if ctrls[0]?
+  
+  
+  app.directive "sliderContent", ->
+  	restrict: 'A'
+  	scope : true
+  	require : ['?^slider']
+  	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+  		_elsData = []
+  		
+  		this.elementReady = (elData) ->
+  			_elsData.push ( elData )
+  
+  	link : (scope, element, attrs, ctrls ) ->
+  		if _elsData.length is scope.elements.length
+  				ctrls[0].setContentProps( _elsData ) if ctrls[0]?
+  */
 
-              };
-              return fr.readAsDataURL(file);
-            });
-            return console.log(event.dataTransfer.files);
-          });
-        }
-      };
-    }
-  ]);
 
 }).call(this);

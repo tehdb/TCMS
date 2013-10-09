@@ -1,0 +1,59 @@
+ul.thumbs
+	$sidebarW : 130px !default
+	$aniDirection : 1 !default
+	$aniDuration : 0.15s !default
+	// 1 left, -1 right
+
+	list-style : none
+	margin : 0
+	padding : 0
+	position : relative
+
+	li.thumb
+		cursor : pointer
+		margin : 10px 0
+		padding : 0
+		position : relative
+		opacity : 1
+		
+
+		&:first-child
+			margin-top: 0
+
+		&:last-child
+			margin-bottom : 0
+
+		.title
+			background: rgba(255,255,255, 0.5)
+			bottom: 10px
+			color: white
+			padding: 5px 10px
+			position: absolute
+			left: 0
+			text-shadow: 0 0 7px #333
+			z-index: 1001
+			opacity : 0
+			+single-transition( $property:all, $duration: $aniDuration, $function:linear )
+			+simple-transform( $trans-x : ($aniDirection*$sidebarW) )
+
+		img 
+			margin: 0
+			padding: 0
+			width : $sidebarW
+			+single-transition( $property:all, $duration: $aniDuration, $function:linear )
+
+		&:hover
+			.title
+				opacity : 1
+				+simple-transform( $trans-x : -6px )
+
+			img
+				+simple-transform( $scale :1.05, $trans-x : -3px )
+
+		&.active
+			.title
+				opacity : 1
+				+simple-transform( $trans-x : -9px )
+
+			img
+				+simple-transform( $scale :1.07, $trans-x : -4px )

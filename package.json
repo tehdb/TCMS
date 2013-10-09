@@ -1,9 +1,13 @@
 {
-  "name": "application-name",
+  "name": "TCMS",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "nodemon app.coffee"
+  },
+  "reposiutory" : {
+    "type" : "git",
+    "url" : "https://github.com/tehdb/TCMS.git"
   },
   "dependencies": {
     "express": "3.4.0",

@@ -161,4 +161,50 @@ exports.getAlbum = ->
 			type : "image"
 			file : "wallpaper_tomb_raider_legend_09_1280.jpg"
 		}]
-	}]
+	},{
+		title : "gallery 4"
+		path : "/uploads/g3/"
+		cover : "0"
+		elements : [{
+			title : "g3 image 2"
+			type : "image"
+			file : "wallpaper_tomb_raider_legend_01_1280.jpg"
+		},{
+			id : "2"
+			title : "g3 image 3"
+			type : "image"
+			file : "wallpaper_tomb_raider_legend_02_1280.jpg"
+		}]
+	},{
+		title : "gallery 5"
+		path : "/uploads/g3/"
+		cover : "0"
+		elements : [{
+			title : "g3 image 2"
+			type : "image"
+			file : "wallpaper_tomb_raider_legend_01_1280.jpg"
+		},{
+			title : "g3 image 3"
+			type : "image"
+			file : "wallpaper_tomb_raider_legend_02_1280.jpg"
+		}]
+	},{
+		title : "gallery 6"
+		path : "/uploads/g3/"
+		cover : "0"
+		elements : [{
+			title : "g3 image 2"
+			type : "image"
+			file : "wallpaper_tomb_raider_legend_01_1280.jpg"
+		},{
+			title : "g3 image 3"
+			type : "image"
+			file : "wallpaper_tomb_raider_legend_02_1280.jpg"
+		}]
+	}
+
+
+	]
+
+
+

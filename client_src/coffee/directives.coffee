@@ -1,217 +1,136 @@
-'use strict'
 
-app.directive "dynamicBackground", ->
+app.directive "imgLoaded" , ->
 	restrict: 'A'
-	link : (scope, element, attrs) ->
-		if attrs.dynamicBackground?
-			scope.$watch( attrs.dynamicBackground, (newVal, oldVal) ->
-				$(element).css({
-					"background-color" : newVal
-				})
-			, false )
+	scope : true
+	#require : ['?^sliderElement' ]
+	link : (scope, element, attrs, ctrls) ->
+		element.unbind('load').bind( 'load', (event) ->
+			console.log( element.attr('alt'), 'loaded')
+			scope.$eval( attrs.imgLoaded )
+			# ctrls[0].imgLoaded( event.target ) if ctrls[0]?
+		)
 
 
-
-
-app.directive "stageImg", ['ImageService', 'settings', (imgs, sttgs)->
+app.directive "imgsList", ->
 	restrict: 'A'
-	link : (scope, element, attrs) ->
+	scope : true
+	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+		_imgCount = 0
+		_imgLoaded = 0
 
-		scope.$image = element
+		attrs.$observe('imgsListSize', (val) ->
+			_imgCount = parseInt( val, 10) if val
+		)
 
-		
-		scope.$watch( ->
-			scope.image
-		, (newVal, oldVal) ->
-			return if newVal is oldVal
-
-			if sttgs.dynamicBackground is true
-				colorPromise = imgs.getImageColor( scope.gallery.path+scope.image.file )
-				colorPromise.then(
-					(color) ->
-						scope.background = "rgb(" + color.join(',') + ")"
-						element.removeClass('veil')
-					, (error) ->
-						element.removeClass('veil')
-				)
-			else
-				element.removeClass('veil')
-		, false )
-]
+		scope.onImgLoaded = () ->
+			#console.log( _imgLoaded + " of " + _imgCount )
+			if ++_imgLoaded >= _imgCount
+				_imgLoaded = 0
+				_onImgsLoaded()
 
 
-app.directive "imageOnLoad" , ->
+		_onImgsLoaded = () ->
+			# dims = {}
+			# dims.width = element.actual('outerWidth', {includeMargin:true} )
+			# dims.height = element.actual('outerHeight', {includeMargin:true} )
+
+			scope.element = element
+			scope.$eval( attrs.imgsListReady )
+	]
+
+
+
+app.directive "vslider", ->
 	restrict: 'A'
-	link : (scope, element, attrs) ->
-		element.bind 'load', ->
-			scope.$apply( attrs.imageOnLoad )
+	scope : true
+	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+		_limits = {top:0, btm: 0, fac:1}
+		_mouseWheelDeltaFactor = 1
+		_content = null
+		_scroller = $('<div>').appendTo( element )
+		_blenderTop = $('<div>').addClass('blenderTop veil').appendTo( element )
+		_blenderBtm = $('<div>').addClass('blenderBtm veil').appendTo( element )
 
+		if attrs.vsliderScroller is 'left'
+			_scroller.addClass('scrollerLeft')
+		else
+			_scroller.addClass('scrollerRight')
 
-app.directive "scroller", ->
-	restrict: 'A'
-
-	controller : ($scope) ->
-		_scroller = $('<div>').addClass('scroller veil')
-		_factor = 1
-		_topY = 0
-
-		$scope.scroller = _scroller
-
-		@init = (elementH, contentH, top) ->
-			_factor = elementH/contentH
-			_topY = top
-			_scroller.height(  _factor * elementH ).css('y', _topY)
+		#************************************************************
+		#** private ************************************************* 
+		_setLimits = ->
+			eh = element.actual('height')
+			ch = _content.actual('outerHeight', {includeMargin:true} )
 			
-		@setPos = (y) ->
-			_scroller.css('y', -y*_factor + _topY)
+			_limits.fac = eh/ch
+			_limits.btm = eh - ch
 
-		@show = ->
-			_scroller.removeClass('veil')
+			_scroller.height( _limits.fac * eh )
 
-		@hide = ->
-			_scroller.addClass('veil')
-		
+			if 0 > _limits.btm
+				_blenderBtm.removeClass('veil')
+				_scrolling( true ) 
 
-	link : (scope, element, attrs) ->
-		scope.scroller.appendTo( element )
-
-
-
-app.directive "slider", ['$timeout', (timeout)->
-	restrict: 'A'
-	require : '?scroller'
-
-	link : (scope, element, attrs, scrollerCtrl ) ->
-		element = element
-
-		_blenderTop = $('<div>').addClass('blender blender-top veil').appendTo( element )
-		_blenderBtm = $('<div>').addClass('blender blender-btm').appendTo( element )
-
-		$content = element.find('ul').first()
-		limits = { top : 0, bottom : 0	}
-
-
-		setLimits = ->
-			limits = { top : 0, bottom : 0	}
-			# TODO: find a way to outsmart angular and dom renderer without timeout
-			timeout( ->
-				elementH = element.actual('outerHeight')
-				elementPaddingTop = parseInt(element.css('padding-top'), 10)
-				elementPaddingBtm = parseInt(element.css('padding-bottom'), 10)
-
-				elementH = elementH - elementPaddingTop - elementPaddingBtm
-				contentH = $content.actual('outerHeight') 
-				limits.bottom = elementH - contentH
-
-				_blenderTop.addClass('veil')
-				_blenderBtm.addClass('veil')
-
-				if 0 > limits.bottom
-					scrolling( true ) 
-					scrollerCtrl.init( elementH, contentH, elementPaddingTop)
-					_blenderBtm.removeClass('veil')
-				
-				
-			, 400 )
-
-		scrolling = ( status=false, elementH=0, contentH=0 ) ->
-			if status is true
-				mouseWheelScrolling()
-				mouseDragDropScrolling()
-
+		_scrolling = (status=false) ->
+			console.log("scrolling")
+			if status
+				_mouseWheelScrolling()
+				_mouseMoveScrolling()
 			else
 				element.unbind('mousewheel mouseenter mouseleave')
-				$content.css('y', limits.top )
+				#_scroller.unbind('mouseenter mouseleave')
+				_content.css('y', _limits.top )
 
+		_contentPosition = (y, ani=false) ->
+			if y >= _limits.top
+				y = _limits.top
+				_blenderTop.addClass('veil')
 
-		mouseWheelScrolling = ->
+			else if y <= _limits.btm
+				y = _limits.btm 
+				_blenderBtm.addClass('veil')
+
+			else
+			 	_blenderTop.removeClass('veil')
+			 	_blenderBtm.removeClass('veil')
+
+			if ani
+				_content.transition({'y': y})
+			else
+				_content.css('y', y )
+
+			
+			_scroller.css('y', -y*_limits.fac )
+
+			# scrollerCtrl.setPos( y )
+
+		_mouseWheelScrolling = ->
 			element.mousewheel (event, delta, deltaX, deltaY ) ->
 				event.preventDefault
 				event.stopPropagation
-				y = parseInt($content.css('y'), 10) + (delta*20)
-				contentPosition( y )
-				return false				
-
-		contentPosition = (y) ->
-			if y > limits.top
-				y = limits.top
-				_blenderTop.addClass('veil')
-
-			else if y < limits.bottom
-				y = limits.bottom 
-				_blenderBtm.addClass('veil')
-
-			else
-				_blenderTop.removeClass('veil')
-				_blenderBtm.removeClass('veil')
-
-			$content.css('y', y )
-			scrollerCtrl.setPos( y )
-
-
-		mouseDragDropScrolling = ->
-			element.mouseenter((event)->
+				y = parseInt(_content.css('y'), 10) + (delta*_mouseWheelDeltaFactor)
+				_contentPosition( y )
+				return false
+		
+		_mouseMoveScrolling = ->
+			_scroller.mouseenter( (event) ->
 				event.preventDefault
 				event.stopPropagation
-				scrollerCtrl.show()
-			).mouseleave( (event)->
+				_scroller.addClass('active')
+			).mouseleave( (event) ->
 				event.preventDefault
 				event.stopPropagation
-				scrollerCtrl.hide()
+				_scroller.removeClass('active')
 			)
 
-		if attrs.sliderDepend?
-			scope.$watch( attrs.sliderDepend, (newVal, oldVal) ->
-				return if newVal is oldVal
-				scrolling( false )
-				if newVal is true
-					setLimits()
-			, false )
-]
+			
 
 
-
-app.directive "progressbar", ['settings', (settings) ->
-	restrict: 'A'
-	link : (scope, element, attrs ) ->
-		progressAni = ->
-			element.width(0).animate({
-				width : '100%'
-			}, settings.slideshowDur*1000 , 'linear', ->
-				if scope.slideshow
-					scope.nextImage( true )
-					progressAni()
-			)
-
-		if attrs.progressbar?
-			scope.$watch( attrs.progressbar, (newVal, oldVal) ->
-				if newVal
-					progressAni()
-				else
-					element.stop().width(0)
-			, false )
-]
-
-app.directive "dropzone", ['settings', (settings) ->
-	restrict: 'A'
-	link : (scope, element, attrs ) ->
-		$.event.props.push('dataTransfer');
-
-		element.bind('dragenter dragover', false).bind('drop', (event) ->
-			event.preventDefault()
-			event.stopPropagation()
-
-			$.each( event.dataTransfer.files, (index, file)->
-				fr = new FileReader()
-				fr.onload = (file) ->
-					console.log( file )
-					###
-					(event) ->
-						element.append( $('<img>').attr('src'))
-					###
-
-				fr.readAsDataURL( file )
-			)
-		)
-]
+		#************************************************************
+		#** public ************************************************* 
+		scope.contentReady = ( contentObj )->
+			_content = contentObj
+			_setLimits()		
+			
+	]
 

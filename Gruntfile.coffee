@@ -33,7 +33,7 @@ module.exports = (grunt) ->
 					#bare : true
 					join : true
 				files :
-					'public/js/main.js' : 'client_src/coffee/main.coffee'
+					#'public/js/main.js' : 'client_src/coffee/main.coffee'
 					'public/js/app.js' : [
 						'client_src/coffee/gallery-app.coffee'
 						'client_src/coffee/services.coffee'

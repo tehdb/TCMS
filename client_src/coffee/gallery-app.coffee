@@ -2,7 +2,7 @@ app = angular.module "TGallery", ["ngAnimate"]
 
 app.constant('settings', {
 	dynamicBackground : false
-	slideshowDur : 3
+	slideshowDur : 5
 	galleriesShow : true
 	thumbnailsShow : true
 })
