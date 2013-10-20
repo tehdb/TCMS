@@ -1,311 +1,146 @@
-/* line 6, ../../client_src/sass/main.sass */
-.T-gallery {
-  background: white;
+/* line 1, ../../client_src/sass/_cover.sass */
+.T_gallery .cover {
+  position: relative;
+  width: 600px;
   height: 450px;
-  overflow: hidden;
-  border: 1px solid #efefef;
-}
-/* line 15, ../../client_src/sass/main.sass */
-.T-gallery .sidebarRight {
-  float: right;
-}
-/* line 1, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-/* line 12, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb {
   cursor: pointer;
-  margin: 10px 0;
-  padding: 0;
-  position: relative;
-  opacity: 1;
 }
-/* line 20, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb:first-child {
-  margin-top: 0;
+/* line 11, ../../client_src/sass/_cover.sass */
+.T_gallery .cover img {
+  max-width: 600px;
+  max-height: 450px;
 }
-/* line 23, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb:last-child {
-  margin-bottom: 0;
-}
-/* line 26, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb .title {
-  background: rgba(255, 255, 255, 0.5);
-  bottom: 10px;
+/* line 15, ../../client_src/sass/_cover.sass */
+.T_gallery .cover .open-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 40px;
+  line-height: 40px;
+  margin-top: -25px;
+  margin-left: -20px;
   color: white;
-  padding: 5px 10px;
+  opacity: 0;
+  text-shadow: 0 0 5px #333333;
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+}
+/* line 28, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els {
   position: absolute;
   left: 0;
-  text-shadow: 0 0 7px #333333;
-  z-index: 1001;
-  opacity: 0;
-  -webkit-transition: all 0.15s linear;
-  -moz-transition: all 0.15s linear;
-  -o-transition: all 0.15s linear;
-  transition: all 0.15s linear;
-  -webkit-transform:  translateX(130px);
-  -moz-transform:  translateX(130px);
-  -ms-transform:  translateX(130px);
-  -o-transform:  translateX(130px);
-  transform:  translateX(130px);
-}
-/* line 39, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb img {
-  margin: 0;
-  padding: 0;
-  width: 130px;
-  -webkit-transition: all 0.15s linear;
-  -moz-transition: all 0.15s linear;
-  -o-transition: all 0.15s linear;
-  transition: all 0.15s linear;
-}
-/* line 46, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb:hover .title {
-  opacity: 1;
-  -webkit-transform:  translateX(-6px);
-  -moz-transform:  translateX(-6px);
-  -ms-transform:  translateX(-6px);
-  -o-transform:  translateX(-6px);
-  transform:  translateX(-6px);
-}
-/* line 50, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb:hover img {
-  -webkit-transform:  scale(1.05, 1.05) translateX(-3px);
-  -moz-transform:  scale(1.05, 1.05) translateX(-3px);
-  -ms-transform:  scale(1.05, 1.05) translateX(-3px);
-  -o-transform:  scale(1.05, 1.05) translateX(-3px);
-  transform:  scale(1.05, 1.05) translateX(-3px);
-}
-/* line 54, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb.active .title {
-  opacity: 1;
-  -webkit-transform:  translateX(-9px);
-  -moz-transform:  translateX(-9px);
-  -ms-transform:  translateX(-9px);
-  -o-transform:  translateX(-9px);
-  transform:  translateX(-9px);
-}
-/* line 58, ../../client_src/sass/thumbs.sass */
-.T-gallery .sidebarRight ul.thumbs li.thumb.active img {
-  -webkit-transform:  scale(1.07, 1.07) translateX(-4px);
-  -moz-transform:  scale(1.07, 1.07) translateX(-4px);
-  -ms-transform:  scale(1.07, 1.07) translateX(-4px);
-  -o-transform:  scale(1.07, 1.07) translateX(-4px);
-  transform:  scale(1.07, 1.07) translateX(-4px);
-}
-/* line 19, ../../client_src/sass/main.sass */
-.T-gallery .sidebarLeft {
-  float: left;
-}
-/* line 1, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-/* line 13, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery {
-  cursor: pointer;
-  margin: 10px 0;
-  padding: 0;
-  position: relative;
-}
-/* line 19, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery:first-child {
-  margin-top: 0;
-}
-/* line 22, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery:last-child {
-  margin-bottom: 0;
-}
-/* line 25, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery .title {
-  background: rgba(255, 255, 255, 0.5);
-  bottom: 10px;
-  color: white;
-  padding: 5px 10px;
-  position: absolute;
-  right: 0;
-  text-shadow: 0 0 7px #333333;
-  z-index: 1001;
-  opacity: 0;
-  -webkit-transition: all 0.15s linear;
-  -moz-transition: all 0.15s linear;
-  -o-transition: all 0.15s linear;
-  transition: all 0.15s linear;
-  -webkit-transform:  translateX(-130px);
-  -moz-transform:  translateX(-130px);
-  -ms-transform:  translateX(-130px);
-  -o-transform:  translateX(-130px);
-  transform:  translateX(-130px);
-}
-/* line 38, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery .count {
-  background: rgba(255, 255, 255, 0.5);
-  top: 5px;
-  color: white;
-  padding: 4px 10px 5px 10px;
-  position: absolute;
-  left: 0;
-  font-size: 12px;
-  line-height: 12px;
-  text-shadow: 0 0 7px #333333;
-  z-index: 1001;
-  opacity: 0;
-  word-spacing: -7px;
-  -webkit-transition: all 0.15s linear;
-  -moz-transition: all 0.15s linear;
-  -o-transition: all 0.15s linear;
-  transition: all 0.15s linear;
-  -webkit-transform:  translateY(-20px);
-  -moz-transform:  translateY(-20px);
-  -ms-transform:  translateY(-20px);
-  -o-transform:  translateY(-20px);
-  transform:  translateY(-20px);
-}
-/* line 54, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery img {
-  width: 130px;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  z-index: 1000;
-  opacity: 1;
-  -webkit-transition: all 0.15s linear;
-  -moz-transition: all 0.15s linear;
-  -o-transition: all 0.15s linear;
-  transition: all 0.15s linear;
-}
-/* line 64, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery:hover .count {
-  opacity: 1;
-  -webkit-transform:  translateY(0);
-  -moz-transform:  translateY(0);
-  -ms-transform:  translateY(0);
-  -o-transform:  translateY(0);
-  transform:  translateY(0);
-}
-/* line 68, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery:hover .title {
-  opacity: 1;
-  -webkit-transform:  translateX(6px);
-  -moz-transform:  translateX(6px);
-  -ms-transform:  translateX(6px);
-  -o-transform:  translateX(6px);
-  transform:  translateX(6px);
-}
-/* line 72, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery:hover img {
-  -webkit-transform:  scale(1.05, 1.05) translateX(3px);
-  -moz-transform:  scale(1.05, 1.05) translateX(3px);
-  -ms-transform:  scale(1.05, 1.05) translateX(3px);
-  -o-transform:  scale(1.05, 1.05) translateX(3px);
-  transform:  scale(1.05, 1.05) translateX(3px);
-}
-/* line 76, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery.active .title {
-  opacity: 1;
-  -webkit-transform:  translateX(9px);
-  -moz-transform:  translateX(9px);
-  -ms-transform:  translateX(9px);
-  -o-transform:  translateX(9px);
-  transform:  translateX(9px);
-}
-/* line 80, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery.active .count {
-  opacity: 1;
-  -webkit-transform:  translateY(0);
-  -moz-transform:  translateY(0);
-  -ms-transform:  translateY(0);
-  -o-transform:  translateY(0);
-  transform:  translateY(0);
-}
-/* line 83, ../../client_src/sass/galleries.sass */
-.T-gallery .sidebarLeft ul.galleries li.gallery.active img {
-  -webkit-transform:  scale(1.07, 1.07) translateX(4px);
-  -moz-transform:  scale(1.07, 1.07) translateX(4px);
-  -ms-transform:  scale(1.07, 1.07) translateX(4px);
-  -o-transform:  scale(1.07, 1.07) translateX(4px);
-  transform:  scale(1.07, 1.07) translateX(4px);
-}
-/* line 23, ../../client_src/sass/main.sass */
-.T-gallery .stage {
-  line-height: 450px;
-  text-align: center;
-}
-/* line 26, ../../client_src/sass/main.sass */
-.T-gallery .stage img {
-  max-width: 400px;
-  display: inline;
-}
-/* line 2, ../../client_src/sass/vslider.sass */
-.T-gallery .vslider {
-  padding: 10px 12px;
-  background: white;
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-}
-/* line 17, ../../client_src/sass/vslider.sass */
-.T-gallery .vslider .blenderBtm, .T-gallery .vslider .blenderTop {
-  height: 20px;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: 1001;
-  opacity: 1;
-  -webkit-transition: opacity 0.15s linear;
-  -webkit-transition-delay: 0.15s;
-  -moz-transition: opacity 0.15s linear 0.15s;
-  -o-transition: opacity 0.15s linear 0.15s;
-  transition: opacity 0.15s linear 0.15s;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
-  background: -webkit-linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-  background: -moz-linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-  background: -o-linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-  background: linear-gradient(rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-}
-/* line 28, ../../client_src/sass/vslider.sass */
-.T-gallery .vslider .blenderBtm.veil, .T-gallery .vslider .veil.blenderTop {
-  opacity: 0;
-}
-/* line 33, ../../client_src/sass/vslider.sass */
-.T-gallery .vslider .blenderTop {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, rgba(255, 255, 255, 0)));
-  background: -webkit-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
-  background: -moz-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
-  background: -o-linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
-  background: linear-gradient(#ffffff 0%, rgba(255, 255, 255, 0) 100%);
   top: 0;
+  padding: 0;
+  margin-top: 15px;
 }
-/* line 38, ../../client_src/sass/vslider.sass */
-.T-gallery .vslider .scrollerRight, .T-gallery .vslider .scrollerLeft {
-  width: 6px;
-  height: 0;
-  background: gray;
-  position: absolute;
-  top: 10px;
-  right: 3px;
-  z-index: 1002;
+/* line 35, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el {
+  position: relative;
+  display: block;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: 5px 20px;
+  text-shadow: 0 0 7px #333333;
+  z-index: 1001;
+  margin-bottom: 15px;
+  overflow: hidden;
+  *zoom: 1;
   opacity: 0;
-  -webkit-transition: opacity 0.15s linear;
-  -webkit-transition-delay: 0.15s;
-  -moz-transition: opacity 0.15s linear 0.15s;
-  -o-transition: opacity 0.15s linear 0.15s;
-  transition: opacity 0.15s linear 0.15s;
+  -webkit-transform:  translateX(150px);
+  -moz-transform:  translateX(150px);
+  -ms-transform:  translateX(150px);
+  -o-transform:  translateX(150px);
+  transform:  translateX(150px);
 }
-/* line 49, ../../client_src/sass/vslider.sass */
-.T-gallery .vslider .scrollerLeft {
-  left: 3px;
+/* line 50, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el:last-child {
+  margin-bottom: 0;
 }
-/* line 55, ../../client_src/sass/vslider.sass */
-.T-gallery .vslider:hover .scrollerRight, .T-gallery .vslider:hover .scrollerLeft,
-.T-gallery .vslider:hover .scrollerLeft {
+/* line 53, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el .glyphicon {
+  float: left;
+  font-size: 15px;
+}
+/* line 57, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el .label {
+  float: left;
+  padding: 0 0 0 10px;
+  line-height: 20px;
+  font-size: 15px;
+  font-weight: normal;
+}
+/* line 69, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el.cover-el-0 {
+  -webkit-transition: all 0.15s linear;
+  -webkit-transition-delay: 0s;
+  -moz-transition: all 0.15s linear 0s;
+  -o-transition: all 0.15s linear 0s;
+  transition: all 0.15s linear 0s;
+}
+/* line 69, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el.cover-el-1 {
+  -webkit-transition: all 0.15s linear;
+  -webkit-transition-delay: 0.08s;
+  -moz-transition: all 0.15s linear 0.08s;
+  -o-transition: all 0.15s linear 0.08s;
+  transition: all 0.15s linear 0.08s;
+}
+/* line 69, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el.cover-el-2 {
+  -webkit-transition: all 0.15s linear;
+  -webkit-transition-delay: 0.16s;
+  -moz-transition: all 0.15s linear 0.16s;
+  -o-transition: all 0.15s linear 0.16s;
+  transition: all 0.15s linear 0.16s;
+}
+/* line 69, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el.cover-el-3 {
+  -webkit-transition: all 0.15s linear;
+  -webkit-transition-delay: 0.24s;
+  -moz-transition: all 0.15s linear 0.24s;
+  -o-transition: all 0.15s linear 0.24s;
+  transition: all 0.15s linear 0.24s;
+}
+/* line 69, ../../client_src/sass/_cover.sass */
+.T_gallery .cover ul.cover-els li.cover-el.cover-el-4 {
+  -webkit-transition: all 0.15s linear;
+  -webkit-transition-delay: 0.32s;
+  -moz-transition: all 0.15s linear 0.32s;
+  -o-transition: all 0.15s linear 0.32s;
+  transition: all 0.15s linear 0.32s;
+}
+/* line 76, ../../client_src/sass/_cover.sass */
+.T_gallery .cover:hover ul.cover-els li.cover-el {
   opacity: 1;
+  -webkit-transform:  translateX(0);
+  -moz-transform:  translateX(0);
+  -ms-transform:  translateX(0);
+  -o-transform:  translateX(0);
+  transform:  translateX(0);
+}
+/* line 80, ../../client_src/sass/_cover.sass */
+.T_gallery .cover:hover .open-btn {
+  opacity: 1;
+}
+/* line 84, ../../client_src/sass/_cover.sass */
+.T_gallery .cover:active .open-btn {
+  color: red;
+  -webkit-transform:  scale(1.2, 1.2);
+  -moz-transform:  scale(1.2, 1.2);
+  -ms-transform:  scale(1.2, 1.2);
+  -o-transform:  scale(1.2, 1.2);
+  transform:  scale(1.2, 1.2);
+}
+/* line 18, ../../client_src/sass/main.sass */
+.T_gallery .dialog {
+  width: 1000px;
+  height: 1000px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: red;
+  z-index: 1010;
 }

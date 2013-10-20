@@ -12,6 +12,11 @@ exports.gallery = (req, res) ->
 	res.render "gallery",
 		title : "Gallery"
 
+exports.gallery2 = (req, res) ->
+	res.render("gallery2",
+		title : "Gallery v2"
+	)	
+
 exports.album = (req, res) ->
 	res.format
 		http : ->

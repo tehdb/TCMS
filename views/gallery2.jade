@@ -1,0 +1,38 @@
+extends layout
+
+block content
+	h1= title
+
+	div.T_gallery(
+		ng-app="TGallery"
+		ng-controller="GalleryCtrl"
+	)
+
+		div.cover(
+			ng-click="openGallery"
+		)
+			img(
+				ng-src="uploads/g3/wallpaper_tomb_raider_legend_01_1280.jpg"
+			)
+
+			ul.cover-els
+				li.cover-el(
+					class="{{'cover-el-'+$index}}"
+					ng-repeat="info in albumInfo"
+				)
+					span.glyphicon(
+						 class="{{info.icon}}"
+					)
+					span.label {{info.label}}
+
+			div.open-btn(
+				ng-click="openGallery()"
+			)
+				span.glyphicon.glyphicon-fullscreen
+
+		div.dialog.animate-show(
+			ng-show="dialogShow"
+			dialog
+		)
+	//- .T_gallery
+

@@ -27,6 +27,7 @@ app
 	# routing
 	.get( "/", routes.index )
 	.get( "/gallery", routes.gallery )
+	.get( "/gallery2", routes.gallery2 )
 	.get( "/album/:id", routes.album )
 
 

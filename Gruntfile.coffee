@@ -37,8 +37,8 @@ module.exports = (grunt) ->
 					'public/js/app.js' : [
 						'client_src/coffee/gallery-app.coffee'
 						'client_src/coffee/services.coffee'
-						'client_src/coffee/controllers.coffee'
-						'client_src/coffee/directives.coffee'
+						'client_src/coffee/controllers2.coffee'
+						'client_src/coffee/directives2.coffee'
 						'client_src/coffee/filters.coffee'
 					]
 

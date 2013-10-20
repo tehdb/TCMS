@@ -1,0 +1,91 @@
+.cover
+	$aniDuration : 0.15s !default
+	$shadowColor : #333 !default
+	$activeColor : red !default
+
+	position : relative
+	width : 600px
+	height : 450px
+	cursor : pointer
+
+	img
+		max-width : 600px
+		max-height : 450px
+
+	.open-btn
+		position : absolute
+		left : 50%
+		top : 50%
+		font-size : 40px
+		line-height : 40px
+		margin-top : -25px
+		margin-left : -20px
+		color : white
+		opacity : 0
+		+text-shadow( 0 0 5px $shadowColor )
+		+transition( all $aniDuration linear )
+
+	ul.cover-els
+		position : absolute
+		left : 0
+		top : 0
+		padding : 0
+		margin-top : 15px
+
+		li.cover-el
+			position : relative
+			display : block
+			list-style : none
+			background: rgba(255,255,255, 0.5)
+			color: white
+			padding: 5px 20px
+			text-shadow: 0 0 7px $shadowColor
+			z-index: 1001
+			margin-bottom : 15px
+
+			+clearfix
+			opacity : 0
+			+simple-transform( $trans-x : 150px )
+
+			&:last-child
+				margin-bottom : 0
+
+			.glyphicon 
+				float : left
+				font-size : 15px
+
+			.label
+				float : left
+				padding : 0 0 0 10px
+				line-height : 20px
+				font-size : 15px
+				font-weight : normal
+
+
+			// set cover-el	
+			$i : 0
+			@while $i < 5
+				$delay : ($aniDuration - 0.07) * $i
+				&.cover-el-#{$i} 
+					// top : 10px + $i*40
+					+transition( all $aniDuration linear $delay )
+				$i : $i+1
+
+	&:hover
+		ul.cover-els
+			li.cover-el
+				opacity : 1
+				+simple-transform( $trans-x : 0 )
+
+		.open-btn
+			opacity : 1
+
+	&:active
+		.open-btn
+			color : $activeColor
+			+simple-transform( $scale : 1.2 )
+
+		
+
+
+	// .cover

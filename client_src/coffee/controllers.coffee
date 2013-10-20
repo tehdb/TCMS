@@ -1,6 +1,6 @@
 
 
-app.controller("GalleryCtrl", [ "$scope", "$timeout", "AlbumService", 'settings',  (scope, timeout, as, sttgs)->
+app.controller("GalleryCtrlOld", [ "$scope", "$timeout", "AlbumService", 'settings',  (scope, timeout, as, sttgs)->
 	scope.galleryIndex = 0
 	scope.mediaElementIndex = 0
 
@@ -76,7 +76,4 @@ app.controller("GalleryCtrl", [ "$scope", "$timeout", "AlbumService", 'settings'
 	scope.onStageImgLoaded = (msg = 'default')->
 		#console.log( msg )
 
-]).resolve = {
-
-
-}
+]) # GalleryCtrl
