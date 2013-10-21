@@ -2,7 +2,9 @@
 app.controller("GalleryCtrl", [ "$scope", "$timeout", "AlbumService", 'settings',  (scope, timeout, as, sttgs)->
 	scope.galleryIndex = 0
 	scope.mediaElementIndex = 0
+	
 	scope.album = null
+	scope.mediaElements = null
 	scope.albumInfo = []
 	scope.dialogShow = false
 
@@ -29,11 +31,6 @@ app.controller("GalleryCtrl", [ "$scope", "$timeout", "AlbumService", 'settings'
 					totalVideos++
 
 				m.thumbSrc = thumbsPath + m.thumb
-
-		# _setData(
-		# 	gallery : gallery
-		# 	elements : elements
-		# )
 		
 		scope.albumInfo.push({
 			label : album.galleries.length + " Galleries"
@@ -52,14 +49,22 @@ app.controller("GalleryCtrl", [ "$scope", "$timeout", "AlbumService", 'settings'
 				icon : 'glyphicon-film'
 			})
 
+		# _setData( album )
+		# gallery : album.galleries[scope.galleryIndex]
+		# elements : album.galleries[scope.galleryIndex].elements
+		# )
+
+		scope.album = album
+		scope.mediaElements = album.galleries[scope.galleryIndex].elements
+
 		
 
-	_setData = (data) ->
-		console.log( data )
-		# scope.$apply(->
-		# 	scope.gallery = data.gallery
-		# 	scope.mels = data.elements
-		# )
+	# _setData = (data) ->
+	# 	# console.log( data )
+	# 	scope.$apply(->
+	# 		scope.gallery = data.gallery
+	# 		scope.mediaElements = data.elements
+	# 	)
 
 
 	scope.openGallery = ->

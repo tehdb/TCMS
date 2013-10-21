@@ -58,7 +58,7 @@ app.directive "vsliderContent", ['$timeout', (timeout) ->
 
 
 
-app.directive "vslider", ->
+app.directive( "vslider", ->
 	restrict: 'A'
 	scope : true
 	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
@@ -141,9 +141,6 @@ app.directive "vslider", ->
 				_scroller.removeClass('active')
 			)
 
-			
-
-
 		#************************************************************
 		#** public ************************************************* 
 		this.contentReady = ( contentObj )->
@@ -151,4 +148,4 @@ app.directive "vslider", ->
 			_setLimits()		
 			
 	]
-
+) # vslider

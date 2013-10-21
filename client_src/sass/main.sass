@@ -6,13 +6,41 @@
 @import "compass/utilities/general/clearfix"
 
 
-.T_gallery
+.t-gallery
 
 	$aniDuration : 0.15s !default
 	$shadowColor : #333 !default
 	$activeColor : red !default
+	$stageW : 500px
+	$stageH : 400px
 
 	@import 'cover'
+
+
+	.gallery-cntr
+		width : $stageW
+		height : $stageH
+		overflow : hidden
+		border : 1px solid red
+		// +box-shadow( 0 0 2px $shadowColor )
+
+		.sidebarRight
+			float : right
+			@import "thumbs.sass"
+
+		.sidebarLeft
+			float : left
+			@import "galleries.sass"
+
+		.stage
+			line-height : $stageH
+			text-align : center
+			img
+				max-width : 400px
+				display : inline
+
+
+	@import "vslider.sass"
 
 
 	.dialog
@@ -21,7 +49,7 @@
 		position : absolute
 		left : 0
 		top : 0
-		background : red
+		background : rgba(120, 120, 120, 0.5)
 		z-index : 1010
 
 

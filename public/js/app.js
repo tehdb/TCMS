@@ -84,10 +84,11 @@
 
   app.controller("GalleryCtrl", [
     "$scope", "$timeout", "AlbumService", 'settings', function(scope, timeout, as, sttgs) {
-      var _prepareData, _setData;
+      var _prepareData;
       scope.galleryIndex = 0;
       scope.mediaElementIndex = 0;
       scope.album = null;
+      scope.mediaElements = null;
       scope.albumInfo = [];
       scope.dialogShow = false;
       as.getAlbum(1, function(data) {
@@ -125,18 +126,132 @@
           });
         }
         if (totalVideos > 0) {
-          return scope.albumInfo.push({
+          scope.albumInfo.push({
             label: totalVideos + " Videos",
             icon: 'glyphicon-film'
           });
         }
-      };
-      _setData = function(data) {
-        return console.log(data);
+        scope.album = album;
+        return scope.mediaElements = album.galleries[scope.galleryIndex].elements;
       };
       return scope.openGallery = function() {
         console.log("open gallery");
         return scope.dialogShow = true;
+      };
+    }
+  ]);
+
+  app.directive("tGallery", [
+    function() {
+      return {
+        restrict: 'A',
+        scope: true,
+        templateUrl: '/partials/gallery.tpl.html',
+        link: function(scope, element, attrs, vs) {}
+      };
+    }
+  ]);
+
+  app.directive("vslider", [
+    function() {
+      return {
+        restrict: 'A',
+        scope: true,
+        controller: [
+          '$scope', '$element', '$attrs', function(scope, element, attrs) {
+            var _blenderBtm, _blenderTop, _content, _contentPosition, _limits, _mouseMoveScrolling, _mouseWheelDeltaFactor, _mouseWheelScrolling, _scroller, _scrolling, _setLimits;
+            _limits = {
+              top: 0,
+              btm: 0,
+              fac: 1
+            };
+            _mouseWheelDeltaFactor = 20;
+            _content = null;
+            _scroller = $('<div>').appendTo(element);
+            _blenderTop = $('<div>').addClass('blenderTop').appendTo(element);
+            _blenderBtm = $('<div>').addClass('blenderBtm').appendTo(element);
+            if (attrs.vsliderScroller === 'left') {
+              _scroller.addClass('scrollerLeft');
+            } else {
+              _scroller.addClass('scrollerRight');
+            }
+            _setLimits = function() {
+              var ch, eh;
+              eh = element.actual('height');
+              ch = _content.actual('outerHeight', {
+                includeMargin: true
+              });
+              _limits.fac = eh / ch;
+              _limits.btm = eh - ch;
+              _scroller.height(_limits.fac * eh);
+              if (0 > _limits.btm) {
+                _blenderBtm.removeClass('veil');
+                return _scrolling(true);
+              }
+            };
+            _scrolling = function(status) {
+              if (status == null) {
+                status = false;
+              }
+              console.log("scrolling");
+              if (status) {
+                _mouseWheelScrolling();
+                return _mouseMoveScrolling();
+              } else {
+                element.unbind('mousewheel mouseenter mouseleave');
+                return _content.css('y', _limits.top);
+              }
+            };
+            _contentPosition = function(y, ani) {
+              if (ani == null) {
+                ani = false;
+              }
+              if (y >= _limits.top) {
+                y = _limits.top;
+                _blenderTop.addClass('veil');
+              } else if (y <= _limits.btm) {
+                y = _limits.btm;
+                _blenderBtm.addClass('veil');
+              } else {
+                _blenderTop.removeClass('veil');
+                _blenderBtm.removeClass('veil');
+              }
+              if (ani) {
+                _content.transition({
+                  'y': y
+                });
+              } else {
+                _content.css('y', y);
+              }
+              return _scroller.css('y', -y * _limits.fac);
+            };
+            _mouseWheelScrolling = function() {
+              return element.mousewheel(function(event, delta, deltaX, deltaY) {
+                var y;
+                event.preventDefault;
+                event.stopPropagation;
+                y = parseInt(_content.css('y'), 10) + (delta * _mouseWheelDeltaFactor);
+                _contentPosition(y);
+                return false;
+              });
+            };
+            _mouseMoveScrolling = function() {
+              return _scroller.mouseenter(function(event) {
+                event.preventDefault;
+                event.stopPropagation;
+                return _scroller.addClass('active');
+              }).mouseleave(function(event) {
+                event.preventDefault;
+                event.stopPropagation;
+                return _scroller.removeClass('active');
+              });
+            };
+            return this.contentReady = function(contentObj) {
+              _content = contentObj;
+              return _setLimits();
+            };
+          }
+        ]
       };
     }
   ]);

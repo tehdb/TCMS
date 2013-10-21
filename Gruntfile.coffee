@@ -14,6 +14,7 @@ module.exports = (grunt) ->
 				files : [
 					'client_src/coffee/**.coffee', 
 					'client_src/sass/**.sass',
+					'client_src/jade/**.jade',
 					'views/*',
 					'app.coffee']
 				tasks : ['build']
@@ -21,7 +22,7 @@ module.exports = (grunt) ->
 					livereload : true
 
 		compass : 
-			dev :
+			compile :
 				options : 
 					#config : 'client_src/config.rb'
 					sassDir : 'client_src/sass'
@@ -42,6 +43,16 @@ module.exports = (grunt) ->
 						'client_src/coffee/filters.coffee'
 					]
 
+		jade : 
+			compile :
+				# options : 
+				# 	data :
+
+				files :
+						'public/partials/gallery.tpl.html' : 'client_src/jade/gallery.jade'
+
+
+
 		###
 		nodemon : 
 			dev : 
@@ -55,6 +66,7 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks('grunt-contrib-watch')
 	grunt.loadNpmTasks('grunt-contrib-compass')
 	grunt.loadNpmTasks('grunt-contrib-coffee')
+	grunt.loadNpmTasks('grunt-contrib-jade')
 	#grunt.loadNpmTasks('grunt-nodemon')
 
-	grunt.registerTask('build', ['compass:dev', 'coffee:compile'])
+	grunt.registerTask('build', ['compass:compile', 'coffee:compile', 'jade:compile'])

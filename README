@@ -11,6 +11,14 @@ check it :
 	http://browserify.org/
 
 
+# grunt
+	
+	# add plugin
+
+	npm install grunt-contrib-jade --save-dev	
+
+
+
 # github
 	git init
 	git add README.md
