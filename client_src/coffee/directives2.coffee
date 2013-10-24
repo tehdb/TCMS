@@ -8,25 +8,23 @@ app.directive "tGallery", [() ->
 ]
 
 
-
 app.directive( "vslider", [()->
 	restrict: 'A'
 	scope : true
-	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+	link : (scope, element, attrs ) ->
+		_content = element.find('ul').first()
 		_limits = {top:0, btm: 0, fac:1}
 		_mouseWheelDeltaFactor = 20 
-		_content = null
 		_scroller = $('<div>').appendTo( element )
-		_blenderTop = $('<div>').addClass('blenderTop').appendTo( element )
-		_blenderBtm = $('<div>').addClass('blenderBtm').appendTo( element )
+		_blenderTop = $('<div>').addClass('blenderTop veil').appendTo( element )
+		_blenderBtm = $('<div>').addClass('blenderBtm veil').appendTo( element )
 
 		if attrs.vsliderScroller is 'left'
 			_scroller.addClass('scrollerLeft')
 		else
 			_scroller.addClass('scrollerRight')
 
-		#************************************************************
-		#** private ************************************************* 
+
 		_setLimits = ->
 			eh = element.actual('height')
 			ch = _content.actual('outerHeight', {includeMargin:true} )
@@ -41,7 +39,6 @@ app.directive( "vslider", [()->
 				_scrolling( true ) 
 
 		_scrolling = (status=false) ->
-			console.log("scrolling")
 			if status
 				_mouseWheelScrolling()
 				_mouseMoveScrolling()
@@ -67,11 +64,9 @@ app.directive( "vslider", [()->
 				_content.transition({'y': y})
 			else
 				_content.css('y', y )
-
 			
 			_scroller.css('y', -y*_limits.fac )
 
-			# scrollerCtrl.setPos( y )
 
 		_mouseWheelScrolling = ->
 			element.mousewheel (event, delta, deltaX, deltaY ) ->
@@ -92,11 +87,26 @@ app.directive( "vslider", [()->
 				_scroller.removeClass('active')
 			)
 
-		#************************************************************
-		#** public ************************************************* 
-		this.contentReady = ( contentObj )->
-			_content = contentObj
-			_setLimits()		
-			
-	]
+
+		scope.$watch( 'album', (nv, ov) ->
+			if nv?			
+				_setLimits()
+		)
 ]) # vslider
+
+
+app.directive "thThumb", [() ->
+	restrict: 'A'
+	scope : true
+	link : (scope, element, attrs ) ->
+		idx = attrs.thThumb
+		element.append( scope.album.galleries[scope.galleryIndex].elements[idx].thumbImg )
+]
+
+app.directive "thCover", [() ->
+	restrict: 'A'
+	scope : true
+	link : (scope, element, attrs ) ->
+		idx = attrs.thCover
+		element.append( scope.album.galleries[idx].coverImg )
+]

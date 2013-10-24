@@ -1,37 +1,20 @@
 
-app.controller("GalleryCtrl", [ "$scope", "$timeout", "AlbumService", 'settings',  (scope, timeout, as, sttgs)->
+app.controller("GalleryCtrl", [ "$scope", "$timeout", "$q", "AlbumService", 'settings',  (scope, timeout, q, as, sttgs)->
 	scope.galleryIndex = 0
-	scope.mediaElementIndex = 0
-	
+	scope.elementIndex = 0
+
 	scope.album = null
-	scope.mediaElements = null
-	scope.albumInfo = []
 	scope.dialogShow = false
 
-	as.getAlbum 1, (data) ->
-		_prepareData(data)
+	do _loadAlbum = ( idx=1)->
+		albumPromise = as.getAlbum( 1 )
+		albumPromise.then (album) ->
+			thumbsPromise = _preloadThumbs( album.galleries[scope.galleryIndex].elements )
+			thumbsPromise.then (elements)->
+				album.galleries[scope.galleryIndex].elements = elements
+				scope.album = album
 
-	_prepareData = (data) ->
-		album = data
-		totalImages = 0
-		totalVideos = 0
-
-		# gallery = album.galleries[scope.galleryIndex]
-		# elements = gallery.elements
-		
-		# prepare paths to images/thumbs and count file by type
-		for g, gidx in album.galleries
-			thumbsPath = g.path + sttgs.thumbsPath
-			
-			for m, midx in g.elements
-				if m.type is 'image'
-					totalImages++
-					m.imgSrc = g.path + m.file
-				else if m.type is 'video'
-					totalVideos++
-
-				m.thumbSrc = thumbsPath + m.thumb
-		
+	_prepareAlbumInfo = () ->		
 		scope.albumInfo.push({
 			label : album.galleries.length + " Galleries"
 			icon : 'glyphicon-book'
@@ -49,22 +32,22 @@ app.controller("GalleryCtrl", [ "$scope", "$timeout", "AlbumService", 'settings'
 				icon : 'glyphicon-film'
 			})
 
-		# _setData( album )
-		# gallery : album.galleries[scope.galleryIndex]
-		# elements : album.galleries[scope.galleryIndex].elements
-		# )
+	_preloadThumbs = ( elements ) ->
+		defer = q.defer()
+		thumbsTotal = elements.length
+		thumbsLoaded = 0
 
-		scope.album = album
-		scope.mediaElements = album.galleries[scope.galleryIndex].elements
+		for elem, eidx in elements
+			thumb = new Image()
+			thumb.onload = ->
+				elements[this.idx].thumbImg = this
+				thumbsLoaded++
+				if thumbsLoaded >= thumbsTotal
+					defer.resolve(elements)
+			thumb.src = elem.thumbSrc
+			thumb.idx = eidx
 
-		
-
-	# _setData = (data) ->
-	# 	# console.log( data )
-	# 	scope.$apply(->
-	# 		scope.gallery = data.gallery
-	# 		scope.mediaElements = data.elements
-	# 	)
+		return defer.promise
 
 
 	scope.openGallery = ->
