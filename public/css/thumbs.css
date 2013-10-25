@@ -1,22 +1,12 @@
 /*
-Syntax error: Undefined mixin 'single-transition'.
-        on line 36 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass, in `single-transition'
-        from line 36 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass
+Syntax error: Undefined mixin 'transition'.
+        on line 18 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass, in `transition'
+        from line 18 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass
 
 Backtrace:
-/Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass:36:in `single-transition'
-/Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass:36
+/Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass:18:in `transition'
+/Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass:18
 /Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/perform.rb:253:in `visit_mixin'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/base.rb:37:in `visit'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/perform.rb:100:in `visit'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/base.rb:53:in `block in visit_children'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/base.rb:53:in `map'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/base.rb:53:in `visit_children'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/perform.rb:109:in `block in visit_children'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/perform.rb:121:in `with_environment'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/perform.rb:108:in `visit_children'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/base.rb:37:in `block in visit'
-/Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/perform.rb:320:in `visit_rule'
 /Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/base.rb:37:in `visit'
 /Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/perform.rb:100:in `visit'
 /Users/alexander.heinz/.rvm/gems/ruby-2.0.0-p247/gems/sass-3.2.10/lib/sass/tree/visitors/base.rb:53:in `block in visit_children'
@@ -78,4 +68,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Syntax error: Undefined mixin 'single-transition'.\A         on line 36 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass, in `single-transition'\A         from line 36 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass"; }
+  content: "Syntax error: Undefined mixin 'transition'.\A         on line 18 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass, in `transition'\A         from line 18 of /Users/alexander.heinz/Projects/TCMS/client_src/sass/thumbs.sass"; }

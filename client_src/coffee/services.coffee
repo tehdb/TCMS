@@ -1,6 +1,6 @@
 
 
-app.service "AlbumService", ['$http', '$log', '$q', 'settings', (http, log, q, sttgs)->
+app.service "AlbumService", ['$http', '$log', '$timeout', '$q', 'settings', (http, log, to, q, sttgs)->
 	getAlbum : (id) ->
 		defer = q.defer()
 		http(
@@ -32,10 +32,7 @@ app.service "AlbumService", ['$http', '$log', '$q', 'settings', (http, log, q, s
 				img = new Image()
 				img.onload = ->
 					data.galleries[this.gidx].coverImg = this
-					g.coverImg = this
-					coverLoaded++
-					if coverLoaded >= coverTotal
-						# callback(data)
+					if ++coverLoaded >= coverTotal
 						defer.resolve(data)
 				img.src = g.elements[g.cover].thumbSrc
 				img.gidx = gi
@@ -45,6 +42,48 @@ app.service "AlbumService", ['$http', '$log', '$q', 'settings', (http, log, q, s
 			defer.reject(status, config)
 		)
 
+		return defer.promise
+
+
+	preloadThumbs : (album, gidx) ->
+		defer = q.defer()
+
+		if album.galleries[gidx].thumbsLoaded 
+			to( ->
+				defer.resolve( album )
+			,11)
+		else
+			thumbsTotal = album.galleries[gidx].elements.length
+			thumbsLoaded = 0
+
+			for elem, eidx in album.galleries[gidx].elements
+				thumb = new Image()
+				thumb.onload = ->
+					album.galleries[gidx].elements[this.idx].thumbImg = this
+					if ++thumbsLoaded >= thumbsTotal
+						album.galleries[gidx].thumbsLoaded = true
+						defer.resolve( album )
+				thumb.src = elem.thumbSrc
+				thumb.idx = eidx
+
+		return defer.promise
+
+	# check if allready loaded, if not load it
+	preloadImage : (album, gidx, iidx) ->
+		defer = q.defer()
+
+		gpath = scope.album.galleries[gidx].path
+
+		img = new Image()
+		img.onload = ->
+			album.elements[gidx].elements[iidx].fileImg = this
+			defer.resolve( album )
+
+		img.onerror = ->
+			defer.reject(status, config)
+
+
+		img.src = gpath + album.elements[gidx].elements[iidx].file
 		return defer.promise
 ]
 

@@ -12,7 +12,7 @@
   });
 
   app.service("AlbumService", [
-    '$http', '$log', '$q', 'settings', function(http, log, q, sttgs) {
+    '$http', '$log', '$timeout', '$q', 'settings', function(http, log, to, q, sttgs) {
       return {
         getAlbum: function(id) {
           var defer;
@@ -47,9 +47,7 @@
               img = new Image();
               img.onload = function() {
                 data.galleries[this.gidx].coverImg = this;
-                g.coverImg = this;
-                coverLoaded++;
-                if (coverLoaded >= coverTotal) {
+                if (++coverLoaded >= coverTotal) {
                   return defer.resolve(data);
                 }
               };
@@ -60,6 +58,48 @@
           }).error(function(data, status, headers, config) {
             return defer.reject(status, config);
           });
+          return defer.promise;
+        },
+        preloadThumbs: function(album, gidx) {
+          var defer, eidx, elem, thumb, thumbsLoaded, thumbsTotal, _i, _len, _ref;
+          defer = q.defer();
+          if (album.galleries[gidx].thumbsLoaded) {
+            to(function() {
+              return defer.resolve(album);
+            }, 11);
+          } else {
+            thumbsTotal = album.galleries[gidx].elements.length;
+            thumbsLoaded = 0;
+            _ref = album.galleries[gidx].elements;
+            for (eidx = _i = 0, _len = _ref.length; _i < _len; eidx = ++_i) {
+              elem = _ref[eidx];
+              thumb = new Image();
+              thumb.onload = function() {
+                album.galleries[gidx].elements[this.idx].thumbImg = this;
+                if (++thumbsLoaded >= thumbsTotal) {
+                  album.galleries[gidx].thumbsLoaded = true;
+                  return defer.resolve(album);
+                }
+              };
+              thumb.src = elem.thumbSrc;
+              thumb.idx = eidx;
+            }
+          }
+          return defer.promise;
+        },
+        preloadImage: function(album, gidx, iidx) {
+          var defer, gpath, img;
+          defer = q.defer();
+          gpath = scope.album.galleries[gidx].path;
+          img = new Image();
+          img.onload = function() {
+            album.elements[gidx].elements[iidx].fileImg = this;
+            return defer.resolve(album);
+          };
+          img.onerror = function() {
+            return defer.reject(status, config);
+          };
+          img.src = gpath + album.elements[gidx].elements[iidx].file;
           return defer.promise;
         }
       };
@@ -111,65 +151,44 @@
   ]);
 
   app.controller("GalleryCtrl", [
-    "$scope", "$timeout", "$q", "AlbumService", 'settings', function(scope, timeout, q, as, sttgs) {
-      var _loadAlbum, _preloadThumbs, _prepareAlbumInfo;
+    "$scope", "$timeout", "$q", "AlbumService", 'settings', function(scope, to, q, as, sttgs) {
       scope.galleryIndex = 0;
       scope.elementIndex = 0;
       scope.album = null;
-      scope.dialogShow = false;
-      (_loadAlbum = function(idx) {
+      scope.element = null;
+      (scope.loadAlbum = function(idx) {
         var albumPromise;
         albumPromise = as.getAlbum(1);
         return albumPromise.then(function(album) {
-          var thumbsPromise;
-          thumbsPromise = _preloadThumbs(album.galleries[scope.galleryIndex].elements);
-          return thumbsPromise.then(function(elements) {
-            album.galleries[scope.galleryIndex].elements = elements;
-            return scope.album = album;
-          });
+          return scope.selectGallery(scope.galleryIndex, album);
         });
       })(1);
-      _prepareAlbumInfo = function() {
-        scope.albumInfo.push({
-          label: album.galleries.length + " Galleries",
-          icon: 'glyphicon-book'
+      scope.selectGallery = function(idx, album) {
+        var promise, _album;
+        _album = album || scope.album;
+        promise = as.preloadThumbs(_album, idx);
+        return promise.then(function(album) {
+          scope.album = album;
+          scope.galleryIndex = idx;
+          return scope.selectImage(0);
         });
-        if (totalImages > 0) {
-          scope.albumInfo.push({
-            label: totalImages + " Images",
-            icon: 'glyphicon-picture'
-          });
-        }
-        if (totalVideos > 0) {
-          return scope.albumInfo.push({
-            label: totalVideos + " Videos",
-            icon: 'glyphicon-film'
-          });
-        }
       };
-      _preloadThumbs = function(elements) {
-        var defer, eidx, elem, thumb, thumbsLoaded, thumbsTotal, _i, _len;
-        defer = q.defer();
-        thumbsTotal = elements.length;
-        thumbsLoaded = 0;
-        for (eidx = _i = 0, _len = elements.length; _i < _len; eidx = ++_i) {
-          elem = elements[eidx];
-          thumb = new Image();
-          thumb.onload = function() {
-            elements[this.idx].thumbImg = this;
-            thumbsLoaded++;
-            if (thumbsLoaded >= thumbsTotal) {
-              return defer.resolve(elements);
-            }
-          };
-          thumb.src = elem.thumbSrc;
-          thumb.idx = eidx;
-        }
-        return defer.promise;
+      scope.selectImage = function(idx) {
+        var path;
+        scope.elementIndex = idx;
+        path = scope.album.galleries[scope.galleryIndex].path;
+        return scope.element = path + scope.album.galleries[scope.galleryIndex].elements[idx].file;
       };
-      return scope.openGallery = function() {
-        console.log("open gallery");
-        return scope.dialogShow = true;
+      return scope.safeApply = function(fn) {
+        var phase;
+        phase = this.$root.$$phase;
+        if (phase === '$apply' || phase === '$digest') {
+          if (fn && (typeof fn === 'function')) {
+            return fn();
+          }
+        } else {
+          return scope.$apply(fn);
+        }
       };
     }
   ]);
@@ -186,12 +205,12 @@
   ]);
 
   app.directive("vslider", [
-    function() {
+    '$timeout', function(to) {
       return {
         restrict: 'A',
         scope: true,
         link: function(scope, element, attrs) {
-          var _blenderBtm, _blenderTop, _content, _contentPosition, _limits, _mouseMoveScrolling, _mouseWheelDeltaFactor, _mouseWheelScrolling, _scroller, _scrolling, _setLimits;
+          var _blenderBtm, _blenderTop, _content, _contentPosition, _limits, _mouseMoveScrolling, _mouseWheelDeltaFactor, _mouseWheelScrolling, _scroller, _setLimits;
           _content = element.find('ul').first();
           _limits = {
             top: 0,
@@ -209,28 +228,22 @@
           }
           _setLimits = function() {
             var ch, eh;
+            _contentPosition(0);
+            _scroller.height(0);
             eh = element.actual('height');
             ch = _content.actual('outerHeight', {
               includeMargin: true
             });
             _limits.fac = eh / ch;
             _limits.btm = eh - ch;
-            _scroller.height(_limits.fac * eh);
             if (0 > _limits.btm) {
+              _scroller.height(_limits.fac * eh);
               _blenderBtm.removeClass('veil');
-              return _scrolling(true);
-            }
-          };
-          _scrolling = function(status) {
-            if (status == null) {
-              status = false;
-            }
-            if (status) {
               _mouseWheelScrolling();
               return _mouseMoveScrolling();
             } else {
               element.unbind('mousewheel mouseenter mouseleave');
-              return _content.css('y', _limits.top);
+              return _contentPosition(0);
             }
           };
           _contentPosition = function(y, ani) {
@@ -277,9 +290,11 @@
               return _scroller.removeClass('active');
             });
           };
-          return scope.$watch('album', function(nv, ov) {
+          return scope.$watch(attrs.vslider, function(nv, ov) {
             if (nv != null) {
-              return _setLimits();
+              return to(function() {
+                return _setLimits();
+              }, 400);
             }
           });
         }
@@ -288,14 +303,29 @@
   ]);
 
   app.directive("thThumb", [
-    function() {
+    '$timeout', function(to) {
       return {
         restrict: 'A',
         scope: true,
         link: function(scope, element, attrs) {
           var idx;
           idx = attrs.thThumb;
-          return element.append(scope.album.galleries[scope.galleryIndex].elements[idx].thumbImg);
+          element.addClass('veil-delay-' + scope.$index);
+          return scope.$watch('galleryIndex', function(nv, ov) {
+            var $img;
+            if (nv != null) {
+              element.addClass('veil');
+              $img = element.find('img');
+              if ($img.length > 0) {
+                $img.replaceWith($(scope.album.galleries[scope.galleryIndex].elements[idx].thumbImg));
+              } else {
+                element.append($(scope.album.galleries[scope.galleryIndex].elements[idx].thumbImg));
+              }
+              return to(function() {
+                return element.removeClass('veil');
+              }, 150 * (scope.$index + 1));
+            }
+          });
         }
       };
     }
@@ -309,7 +339,11 @@
         link: function(scope, element, attrs) {
           var idx;
           idx = attrs.thCover;
-          return element.append(scope.album.galleries[idx].coverImg);
+          return scope.$watch('album', function(nv, ov) {
+            if (nv != null) {
+              return element.append(scope.album.galleries[idx].coverImg);
+            }
+          });
         }
       };
     }

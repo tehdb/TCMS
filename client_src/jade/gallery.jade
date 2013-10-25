@@ -2,53 +2,41 @@ div.gallery-cntr
 	//----------------------------------------------------------------------
 	//-- thumbs ------------------------------------------------------------
 	div.sidebarRight.vslider(
-		vslider
+		vslider="galleryIndex"
 		vslider-scroller="right"
 	)
-		ul.thumbs(
-				vslider-content="mels"
-			)
+		ul.thumbs
 			li.thumb(
 				ng-repeat="me in album.galleries[galleryIndex].elements"
 				ng-class="{'active': $index == elementIndex}"
+				ng-click="selectImage($index)"
 				th-thumb="{{$index}}"
 			)
-				//- th-thumb="{{me.thumbImg.idx}}"
 				div.title {{me.title}}
-				//- img(
-				//- 	ng-src="{{me.thumbSrc}}"
-				//- 	alt="{{me.title}}"
-				//- )
-				
 
 	//----------------------------------------------------------------------
 	//-- galleries ---------------------------------------------------------
 	div.sidebarLeft.vslider(
-		vslider
+		vslider="album"
 		vslider-scroller="left"
 	)
 
 		ul.galleries
 			li.gallery(
-				ng-repeat="g in album.galleries",
+				ng-repeat="g in album.galleries"
 				ng-class="{'active': $index == galleryIndex}"
-				ng-click="showGallery($index)"
+				ng-click="selectGallery($index)"
 				th-cover="{{$index}}"
 			)
-				//- th-thumb="{{$index}}"
 				div.count
 					span.glyphicon.glyphicon-picture &nbsp;{{g.elements.length}}
 					//- ,&nbsp;
 					//- span.glyphicon.glyphicon-picture &nbsp;{{g.elements.length}}
 				div.title {{g.title}}
-				//- img(
-				//- 	ng-src="{{g.path}}thumbs/{{g.elements[g.cover].thumb}}",
-				//- 	alt="{{e.title}}")
 
 	//----------------------------------------------------------------------
 	//-- stage -------------------------------------------------------------
-	//- div.stage
-	//- 	img(
-	//- 		ng-src="{{gallery.path}}{{mediaElement.file}}", 
-	//- 		alt="{{mediaElement.title}}"
-	//- 	)
+	div.stage
+		img(
+			ng-src="{{element}}"
+		)

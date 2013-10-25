@@ -15,7 +15,9 @@ ul.thumbs
 		padding : 0
 		position : relative
 		opacity : 1
-		
+		+transition( all $aniDuration linear )
+		+translateX(0)
+
 
 		&:first-child
 			margin-top: 0
@@ -40,7 +42,13 @@ ul.thumbs
 			margin: 0
 			padding: 0
 			width : $sidebarW
-			+single-transition( $property:all, $duration: $aniDuration, $function:linear )
+			opacity : 1
+			+transition( all $aniDuration linear )
+
+		&.veil
+			opacity : 0
+			+translateX($sidebarW)
+
 
 		&:hover
 			.title
@@ -51,6 +59,7 @@ ul.thumbs
 				+simple-transform( $scale :1.05, $trans-x : -3px )
 
 		&.active
+			cursor : default
 			.title
 				opacity : 1
 				+simple-transform( $trans-x : -9px )

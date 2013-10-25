@@ -159,16 +159,25 @@
   padding: 0;
   position: relative;
   opacity: 1;
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
 }
-/* line 20, ../../client_src/sass/thumbs.sass */
+/* line 22, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb:first-child {
   margin-top: 0;
 }
-/* line 23, ../../client_src/sass/thumbs.sass */
+/* line 25, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb:last-child {
   margin-bottom: 0;
 }
-/* line 26, ../../client_src/sass/thumbs.sass */
+/* line 28, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb .title {
   background: rgba(255, 255, 255, 0.5);
   bottom: 10px;
@@ -189,17 +198,27 @@
   -o-transform:  translateX(130px);
   transform:  translateX(130px);
 }
-/* line 39, ../../client_src/sass/thumbs.sass */
+/* line 41, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb img {
   margin: 0;
   padding: 0;
   width: 130px;
+  opacity: 1;
   -webkit-transition: all 0.15s linear;
   -moz-transition: all 0.15s linear;
   -o-transition: all 0.15s linear;
   transition: all 0.15s linear;
 }
-/* line 46, ../../client_src/sass/thumbs.sass */
+/* line 48, ../../client_src/sass/thumbs.sass */
+.t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb.veil {
+  opacity: 0;
+  -webkit-transform: translateX(130px);
+  -moz-transform: translateX(130px);
+  -ms-transform: translateX(130px);
+  -o-transform: translateX(130px);
+  transform: translateX(130px);
+}
+/* line 54, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb:hover .title {
   opacity: 1;
   -webkit-transform:  translateX(-6px);
@@ -208,7 +227,7 @@
   -o-transform:  translateX(-6px);
   transform:  translateX(-6px);
 }
-/* line 50, ../../client_src/sass/thumbs.sass */
+/* line 58, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb:hover img {
   -webkit-transform:  scale(1.05, 1.05) translateX(-3px);
   -moz-transform:  scale(1.05, 1.05) translateX(-3px);
@@ -216,7 +235,11 @@
   -o-transform:  scale(1.05, 1.05) translateX(-3px);
   transform:  scale(1.05, 1.05) translateX(-3px);
 }
-/* line 54, ../../client_src/sass/thumbs.sass */
+/* line 61, ../../client_src/sass/thumbs.sass */
+.t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb.active {
+  cursor: default;
+}
+/* line 63, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb.active .title {
   opacity: 1;
   -webkit-transform:  translateX(-9px);
@@ -225,7 +248,7 @@
   -o-transform:  translateX(-9px);
   transform:  translateX(-9px);
 }
-/* line 58, ../../client_src/sass/thumbs.sass */
+/* line 67, ../../client_src/sass/thumbs.sass */
 .t-gallery .gallery-cntr .sidebarRight ul.thumbs li.thumb.active img {
   -webkit-transform:  scale(1.07, 1.07) translateX(-4px);
   -moz-transform:  scale(1.07, 1.07) translateX(-4px);
@@ -343,7 +366,11 @@
   -o-transform:  scale(1.05, 1.05) translateX(3px);
   transform:  scale(1.05, 1.05) translateX(3px);
 }
-/* line 76, ../../client_src/sass/galleries.sass */
+/* line 75, ../../client_src/sass/galleries.sass */
+.t-gallery .gallery-cntr .sidebarLeft ul.galleries li.gallery.active {
+  cursor: default;
+}
+/* line 77, ../../client_src/sass/galleries.sass */
 .t-gallery .gallery-cntr .sidebarLeft ul.galleries li.gallery.active .title {
   opacity: 1;
   -webkit-transform:  translateX(9px);
@@ -352,7 +379,7 @@
   -o-transform:  translateX(9px);
   transform:  translateX(9px);
 }
-/* line 80, ../../client_src/sass/galleries.sass */
+/* line 81, ../../client_src/sass/galleries.sass */
 .t-gallery .gallery-cntr .sidebarLeft ul.galleries li.gallery.active .count {
   opacity: 1;
   -webkit-transform:  translateY(0);
@@ -361,7 +388,7 @@
   -o-transform:  translateY(0);
   transform:  translateY(0);
 }
-/* line 83, ../../client_src/sass/galleries.sass */
+/* line 84, ../../client_src/sass/galleries.sass */
 .t-gallery .gallery-cntr .sidebarLeft ul.galleries li.gallery.active img {
   -webkit-transform:  scale(1.07, 1.07) translateX(4px);
   -moz-transform:  scale(1.07, 1.07) translateX(4px);
@@ -376,7 +403,7 @@
 }
 /* line 38, ../../client_src/sass/main.sass */
 .t-gallery .gallery-cntr .stage img {
-  max-width: 400px;
+  max-width: 170px;
   display: inline;
 }
 /* line 2, ../../client_src/sass/vslider.sass */

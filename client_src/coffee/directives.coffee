@@ -1,70 +1,20 @@
 
-app.directive "imgLoaded" , ->
+app.directive "tGallery", [() ->
 	restrict: 'A'
 	scope : true
-	#require : ['?^sliderElement' ]
-	link : (scope, element, attrs, ctrls) ->
-		element.unbind('load').bind( 'load', (event) ->
-			console.log( element.attr('alt'), 'loaded')
-			scope.$eval( attrs.imgLoaded )
-			# ctrls[0].imgLoaded( event.target ) if ctrls[0]?
-		)
-
-
-app.directive "imgsList", ->
-	restrict: 'A'
-	scope : true
-	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
-		_imgCount = 0
-		_imgLoaded = 0
-
-		attrs.$observe('imgsListSize', (val) ->
-			_imgCount = parseInt( val, 10) if val
-		)
-
-		scope.onImgLoaded = () ->
-			#console.log( _imgLoaded + " of " + _imgCount )
-			if ++_imgLoaded >= _imgCount
-				_imgLoaded = 0
-				_onImgsLoaded()
-
-
-		_onImgsLoaded = () ->
-			# dims = {}
-			# dims.width = element.actual('outerWidth', {includeMargin:true} )
-			# dims.height = element.actual('outerHeight', {includeMargin:true} )
-
-			scope.element = element
-			scope.$eval( attrs.imgsListReady )
-	]
-
-
-app.directive "vsliderContent", ['$timeout', (timeout) ->
-	restrict: 'A'
-	scope : true
-	require : "^vslider"
+	templateUrl : '/partials/gallery.tpl.html'
 	link : (scope, element, attrs, vs ) ->
-		if attrs.vsliderContent?
-			scope.$watch( attrs.vsliderContent, (nv, ov) ->
-				return if nv is ov
-				console.log( element.actual('height'), element.height() )
-				timeout(->
-					console.log( element.actual('height'), element.height() )
-					vs.contentReady(element)
-				, 400)
-			, false )
+
 ]
 
 
-
-
-app.directive( "vslider", ->
+app.directive( "vslider", [ '$timeout', (to)->
 	restrict: 'A'
 	scope : true
-	controller : [ '$scope', '$element', '$attrs', (scope, element, attrs ) ->
+	link : (scope, element, attrs ) ->
+		_content = element.find('ul').first()
 		_limits = {top:0, btm: 0, fac:1}
 		_mouseWheelDeltaFactor = 20 
-		_content = null
 		_scroller = $('<div>').appendTo( element )
 		_blenderTop = $('<div>').addClass('blenderTop veil').appendTo( element )
 		_blenderBtm = $('<div>').addClass('blenderBtm veil').appendTo( element )
@@ -74,30 +24,27 @@ app.directive( "vslider", ->
 		else
 			_scroller.addClass('scrollerRight')
 
-		#************************************************************
-		#** private ************************************************* 
+
 		_setLimits = ->
+			_contentPosition(0)
+			_scroller.height(0)
 			eh = element.actual('height')
 			ch = _content.actual('outerHeight', {includeMargin:true} )
 			
+			# console.log eh, ch
+
 			_limits.fac = eh/ch
 			_limits.btm = eh - ch
 
-			_scroller.height( _limits.fac * eh )
 
 			if 0 > _limits.btm
+				_scroller.height( _limits.fac * eh )
 				_blenderBtm.removeClass('veil')
-				_scrolling( true ) 
-
-		_scrolling = (status=false) ->
-			console.log("scrolling")
-			if status
 				_mouseWheelScrolling()
 				_mouseMoveScrolling()
 			else
 				element.unbind('mousewheel mouseenter mouseleave')
-				#_scroller.unbind('mouseenter mouseleave')
-				_content.css('y', _limits.top )
+				_contentPosition(0)
 
 		_contentPosition = (y, ani=false) ->
 			if y >= _limits.top
@@ -116,11 +63,9 @@ app.directive( "vslider", ->
 				_content.transition({'y': y})
 			else
 				_content.css('y', y )
-
 			
 			_scroller.css('y', -y*_limits.fac )
 
-			# scrollerCtrl.setPos( y )
 
 		_mouseWheelScrolling = ->
 			element.mousewheel (event, delta, deltaX, deltaY ) ->
@@ -141,11 +86,50 @@ app.directive( "vslider", ->
 				_scroller.removeClass('active')
 			)
 
-		#************************************************************
-		#** public ************************************************* 
-		this.contentReady = ( contentObj )->
-			_content = contentObj
-			_setLimits()		
-			
-	]
-) # vslider
+		scope.$watch( attrs.vslider, (nv, ov) ->
+			if nv?
+				to( ->
+					_setLimits()
+				,400)
+		)
+]) # vslider
+
+
+app.directive "thThumb", [ '$timeout', (to) ->
+	restrict: 'A'
+	scope : true
+	link : (scope, element, attrs ) ->
+		idx = attrs.thThumb
+		element.addClass('veil-delay-'+scope.$index )
+
+		scope.$watch( 'galleryIndex', (nv, ov) ->
+			if nv?
+				element.addClass('veil')
+
+				$img = element.find('img')
+				if $img.length > 0
+					$img.replaceWith(  $(scope.album.galleries[scope.galleryIndex].elements[idx].thumbImg) )
+				else
+					element.append( $(scope.album.galleries[scope.galleryIndex].elements[idx].thumbImg) )
+
+				to(->
+					element.removeClass('veil')		
+				,150*(scope.$index+1))
+		)
+]
+
+app.directive "thCover", [() ->
+	restrict: 'A'
+	scope : true
+	link : (scope, element, attrs ) ->
+		idx = attrs.thCover
+		scope.$watch( 'album', (nv, ov) ->
+			if nv?			
+				element.append( scope.album.galleries[idx].coverImg )
+		)
+]
+
+
+
+
+

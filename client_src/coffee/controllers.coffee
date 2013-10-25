@@ -1,79 +1,56 @@
 
-
-app.controller("GalleryCtrlOld", [ "$scope", "$timeout", "AlbumService", 'settings',  (scope, timeout, as, sttgs)->
+app.controller("GalleryCtrl", [ "$scope", "$timeout", "$q", "AlbumService", 'settings',  (scope, to, q, as, sttgs)->
 	scope.galleryIndex = 0
-	scope.mediaElementIndex = 0
+	scope.elementIndex = 0
+	scope.album = null
+	scope.element = null
+
+	do scope.loadAlbum = ( idx=1)->
+		albumPromise = as.getAlbum( 1 )
+		albumPromise.then (album) ->
+			scope.selectGallery( scope.galleryIndex, album)
+
+	scope.selectGallery = (idx, album) ->
+		_album = album or scope.album
+		promise = as.preloadThumbs( _album, idx )
+		promise.then (album) ->
+			scope.album = album
+			scope.galleryIndex = idx
+			scope.selectImage(0)
+
+	# TODO: preload image
+	scope.selectImage = (idx) ->
+		scope.elementIndex = idx
+		path = scope.album.galleries[scope.galleryIndex].path
+		scope.element = path + scope.album.galleries[scope.galleryIndex].elements[idx].file
 
 
-	as.getAlbum 1, (data) ->
-		_prepareData(data)
-		###
-		scope.album = data
-		scope.gallery = scope.album.galleries[scope.galleryIndex]
-		scope.mediaElements = scope.gallery.elements
-		scope.mediaElement = scope.mediaElements[scope.mediaElementIndex]
-		###
+	scope.safeApply = (fn) ->
+		phase = this.$root.$$phase
+		if phase is '$apply' or phase is '$digest'
+			if fn and (typeof fn is 'function')
+				fn()
+		else
+			scope.$apply(fn)
 
 
-	#************************************************************
-	#** private *************************************************
-	_prepareData = (data) ->
-		album = data
-		gallery = album.galleries[scope.galleryIndex]
-		elements = gallery.elements
-		path = gallery.path+sttgs.thumbnsPath
+
+	# _prepareAlbumInfo = () ->		
+	# 	scope.albumInfo.push({
+	# 		label : album.galleries.length + " Galleries"
+	# 		icon : 'glyphicon-book'
+	# 	})
 		
-		# preload thumbs
-		thumbsCount = elements.length
-		thumbsLoaded = 0
-		for el, index in elements
-			img = new Image()
-			img.onload = ->
-				console.log( this.src , "loaded")
-				if ++thumbsLoaded >= thumbsCount
-					_setData({
-						gallery : gallery
-						elements : elements
-					})
-			img.src = path+el.thumb
-			elements[index].thumbSrc = img.src
-			elements[index].thumbImgObj = img
+	# 	if totalImages > 0
+	# 		scope.albumInfo.push({
+	# 			label : totalImages + " Images"
+	# 			icon : 'glyphicon-picture'
+	# 		})
 
-	_setData = (data) ->
-		scope.$apply(->
-			scope.gallery = data.gallery
-			scope.mels = data.elements
-		)
+	# 	if totalVideos > 0
+	# 		scope.albumInfo.push({
+	# 			label : totalVideos + " Videos"
+	# 			icon : 'glyphicon-film'
+	# 		})
 
-
-		#mediaElements = gallery.elements
-		#_preloadThumbs( gallery.elements, (gallery.path+sttgs.thumbnsPath) )
-
-	_preloadThumbs = (els, path) ->
-		thumbsCount = els.length
-		thumbsLoaded = 0
-		for el, index in els
-			img = new Image()
-			img.onload = ->
-				if ++thumbsLoaded >= thumbsCount
-					console.log("thumbs loaded")
-			img.src = path+el.thumb
-
-			el.thumbImgObj = img
-
-
-
-	scope.showGallery = ( index) ->
-		scope.galleryIndex = index
-		scope.gallery = scope.album.galleries[scope.galleryIndex]
-		scope.mediaElements = scope.gallery.elements
-		scope.showMediaElement(0)
-
-	scope.showMediaElement = ( index ) ->
-		scope.mediaElementIndex = index
-		scope.mediaElement = scope.mediaElements[scope.mediaElementIndex]
-
-	scope.onStageImgLoaded = (msg = 'default')->
-		#console.log( msg )
-
-]) # GalleryCtrl
+])
