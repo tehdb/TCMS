@@ -11,37 +11,82 @@
 	$aniDuration : 0.15s !default
 	$shadowColor : #333 !default
 	$activeColor : red !default
-	$stageW : 500px
-	$stageH : 400px
+	$stageW : 800px
+	$stageH : 450px
 
 	@import 'cover'
 
-
 	.gallery-cntr
-		width : $stageW
+		width : 100%
 		height : $stageH
 		overflow : hidden
-		border : 1px solid red
-		// +box-shadow( 0 0 2px $shadowColor )
+		+box-shadow( 0 0 1px $shadowColor )
 
 		.sidebarRight
 			float : right
-			@import "thumbs.sass"
+			opacity : 1
+			@import "thumbs"
+			z-index: 999
+			+transition( all $aniDuration linear )
+			+translateX(0)
+			&.veil
+				opacity : 0
+				+translateX(160px)
+
 
 		.sidebarLeft
 			float : left
-			@import "galleries.sass"
+			opacity : 1
+			@import "galleries"
+			z-index: 999
+			+transition( all $aniDuration linear )
+			+translateX(0)
+			&.veil
+				opacity : 0
+				+translateX(-160px)
 
 		.stage
-			line-height : $stageH
-			text-align : center
+			height : $stageH
+			width : 100%
+			position: relative
+			z-index: 998
 			img
-				max-width : 170px
-				display : inline
+				position : absolute
+				opacity : 1
+				+transition( all $aniDuration linear )
+
+				&.veilin
+					opacity : 0
+					+simple-transform( $scale : 0.8 )
+
+				&.veilout
+					opacity : 0
+					+simple-transform( $scale : 1.2 )
+
+	.control
+		width : 100%
+		text-align : center
+		padding : 5px 0
+
+		.btn.active
+			color : #ebebeb
+			background-color: #333
+
+		.progress
+			height : 6px
+			margin-bottom : 5px
+			background : none
+			+box-shadow(none)
+
+			.progress-bar
+				+transition( none)
+
+			.progress-bar-success
+				background-color : $shadowColor 
 
 
-	@import "vslider.sass"
 
+	@import "vslider"
 
 	.dialog
 		width : 1000px

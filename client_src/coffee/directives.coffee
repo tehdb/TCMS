@@ -31,7 +31,6 @@ app.directive( "vslider", [ '$timeout', (to)->
 			eh = element.actual('height')
 			ch = _content.actual('outerHeight', {includeMargin:true} )
 			
-			# console.log eh, ch
 
 			_limits.fac = eh/ch
 			_limits.btm = eh - ch
@@ -129,6 +128,98 @@ app.directive "thCover", [() ->
 		)
 ]
 
+
+app.directive "thStage", ['$timeout', 'settings', (to, sttgs) ->
+	restrict: 'A'
+	scope : true
+	link : (scope, element, attrs ) ->
+		_centerImg = ( $img )->
+			sidebarFactor = 0
+			sidebarFactor++ if scope.control.thumbsShow
+			sidebarFactor++ if scope.control.galleriesShow
+
+			stageW = element.width() - sidebarFactor*sttgs.sidebarW
+			stageH = element.height() - 20
+			imgW = $img[0].width
+			imgH = $img[0].height
+			difW = imgW/stageW
+			difH = imgH/stageH
+			scaleFactor = 1
+
+			if difW > 1 or difH > 1
+				if difW > difH
+					scaleFactor = difW
+				else
+					scaleFactor = difH
+
+				imgW = Math.round( imgW / scaleFactor)
+				imgH = Math.round( imgH / scaleFactor)
+
+
+			imgX = (stageW - imgW)/2
+			imgY = (stageH - imgH)/2 + 10
+
+			imgX += sttgs.sidebarW if scope.control.galleriesShow
+
+			$img.css({
+				width : imgW
+				height : imgH
+				left : imgX
+				top : imgY
+			})
+
+		scope.$watchCollection( '[control.thumbsShow, control.galleriesShow]', (nv, ov) ->
+			if nv?
+				$img =  element.find('img')
+				if $img.length > 0
+					_centerImg( $img )
+		)
+
+		scope.$watch( 'elementIndex', (nv, ov) ->
+			if nv?
+				$media = element.find('img')
+				$img = $(scope.album.galleries[scope.galleryIndex].elements[nv].fileImg)
+				_centerImg($img)
+				$img.addClass('veilin')
+
+
+				if $media.length > 0
+					$media.addClass('veilout')
+					to(->
+						$media.replaceWith( $img )
+						to(->
+							$media.removeClass('veilout')
+							$img.removeClass('veilin')	
+						,150)
+					,150)
+				else
+					element.append( $img )
+					to(->
+						$img.removeClass('veilin')	
+					,150)
+		)
+]
+
+app.directive "thSlideshowProgress", ['settings', (sttgs) ->
+	restrict: 'A'
+	scope : true
+	link : (scope, element, attrs ) ->
+		_next = ->
+
+			element.animate {
+				'width': '100%'			
+			}, sttgs.slideshowDur*1000, 'linear', ->
+				element.width(0)
+				scope.nextImage()
+				_next() if scope.slideshow
+			
+
+		scope.$watch "slideshow", (nv, ov) ->
+			if nv
+				_next()
+			else
+				element.stop().width(0)
+]
 
 
 

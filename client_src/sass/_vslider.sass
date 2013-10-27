@@ -1,0 +1,57 @@
+
+.vslider
+	$blenderH : 20px !default
+	$vpadding : 10px !default
+	$hpadding : 12px !default
+	$scrollerW : 6px !default
+	$backgroundColor : white !default
+	$scrollerColor : gray !default
+	$aniDuration : 0.15s !default
+
+	padding : $vpadding $hpadding
+	background : $backgroundColor
+	position: relative
+	height : 100%
+	overflow : hidden
+
+	.blenderBtm
+		height : $blenderH
+		width : 100%
+		position : absolute
+		left : 0
+		bottom : 0
+		z-index : 1001
+		opacity : 1
+		+single-transition( $property:opacity, $duration: $aniDuration, $function:linear, $delay : $aniDuration )
+		+background( linear-gradient( rgba(255,255,255,0) 0, $backgroundColor 100%) )
+
+		&.veil
+			opacity : 0
+
+
+	
+	.blenderTop
+		@extend .blenderBtm
+		+background( linear-gradient( $backgroundColor 0, rgba(255,255,255,0) 100% ) )
+		top : 0
+
+	.scrollerRight
+		width : $scrollerW
+		height : 0
+		background : $scrollerColor
+		position : absolute
+		top : $vpadding
+		right : round(($hpadding - $scrollerW)/2)
+		z-index : 1002
+		opacity : 0
+		+single-transition( $property:opacity, $duration: $aniDuration, $function:linear, $delay : $aniDuration )
+
+	.scrollerLeft
+		@extend .scrollerRight
+		left : round(($hpadding - $scrollerW)/2)
+
+
+	&:hover
+		.scrollerRight,
+		.scrollerLeft
+			opacity : 1

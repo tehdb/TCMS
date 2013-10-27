@@ -26,3 +26,17 @@ check it :
 	git remote add origin https://github.com/tehdb/TCMS.git
 	git push -u origin master
 
+
+# TODO:
+	
+	gallery
+
+	x load and cache images
+	x switch image ani
+	x prev/next buttons
+	x slideshow/ play,pause buttons and progress bar
+	x hide/show sidebars
+	x center image on stage
+	- current thumb in view port
+	- activity indicator
+	- full screen dialog

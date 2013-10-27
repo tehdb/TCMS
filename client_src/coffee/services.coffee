@@ -1,11 +1,18 @@
 
 
 app.service "AlbumService", ['$http', '$log', '$timeout', '$q', 'settings', (http, log, to, q, sttgs)->
-	getAlbum : (id) ->
+	albums : {}
+	albumIndex : null
+
+	getAlbum : (idx) ->
 		defer = q.defer()
+
+		_this = this
+		_this.albumIndex = idx
+
 		http(
 			method : 'GET'
-			url : "/album/#{id}"
+			url : "/album/#{idx}"
 		).success((data, status, headers, config)->
 			data.info = {
 				totalImages : 0
@@ -33,7 +40,8 @@ app.service "AlbumService", ['$http', '$log', '$timeout', '$q', 'settings', (htt
 				img.onload = ->
 					data.galleries[this.gidx].coverImg = this
 					if ++coverLoaded >= coverTotal
-						defer.resolve(data)
+						_this.albums[_this.albumIndex] = data
+						defer.resolve( data )
 				img.src = g.elements[g.cover].thumbSrc
 				img.gidx = gi
 
@@ -45,45 +53,54 @@ app.service "AlbumService", ['$http', '$log', '$timeout', '$q', 'settings', (htt
 		return defer.promise
 
 
-	preloadThumbs : (album, gidx) ->
+	preloadThumbs : (gidx) ->
+		_this = this
 		defer = q.defer()
 
-		if album.galleries[gidx].thumbsLoaded 
+
+		if _this.albums[_this.albumIndex].galleries[gidx].thumbsLoaded 
 			to( ->
-				defer.resolve( album )
+				defer.resolve( true )
 			,11)
 		else
-			thumbsTotal = album.galleries[gidx].elements.length
+			thumbsTotal = _this.albums[_this.albumIndex].galleries[gidx].elements.length
 			thumbsLoaded = 0
 
-			for elem, eidx in album.galleries[gidx].elements
+			for elem, eidx in _this.albums[_this.albumIndex].galleries[gidx].elements
 				thumb = new Image()
 				thumb.onload = ->
-					album.galleries[gidx].elements[this.idx].thumbImg = this
+					_this.albums[_this.albumIndex].galleries[gidx].elements[this.idx].thumbImg = this
 					if ++thumbsLoaded >= thumbsTotal
-						album.galleries[gidx].thumbsLoaded = true
-						defer.resolve( album )
+						_this.albums[_this.albumIndex].galleries[gidx].thumbsLoaded = true
+						defer.resolve( true )
 				thumb.src = elem.thumbSrc
 				thumb.idx = eidx
 
 		return defer.promise
 
 	# check if allready loaded, if not load it
-	preloadImage : (album, gidx, iidx) ->
+	loadImage : ( gidx, iidx) ->
+		_this = this
 		defer = q.defer()
 
-		gpath = scope.album.galleries[gidx].path
+		gpath = _this.albums[_this.albumIndex].galleries[gidx].path
 
-		img = new Image()
-		img.onload = ->
-			album.elements[gidx].elements[iidx].fileImg = this
-			defer.resolve( album )
+		if _this.albums[_this.albumIndex].galleries[gidx].elements[iidx].fileImg?
+			to(->
+				defer.resolve(true)
+			,11)
+		else
+			img = new Image()
+			img.onload = ->
+				_this.albums[_this.albumIndex].galleries[gidx].elements[iidx].fileImg = this
+				defer.resolve( true )
 
-		img.onerror = ->
-			defer.reject(status, config)
+			img.onerror = ->
+				defer.reject(status, config)
 
 
-		img.src = gpath + album.elements[gidx].elements[iidx].file
+			img.src = gpath + _this.albums[_this.albumIndex].galleries[gidx].elements[iidx].file
+		
 		return defer.promise
 ]
 

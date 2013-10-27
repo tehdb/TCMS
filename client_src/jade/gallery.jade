@@ -4,6 +4,7 @@ div.gallery-cntr
 	div.sidebarRight.vslider(
 		vslider="galleryIndex"
 		vslider-scroller="right"
+		ng-class="{'veil' : !control.thumbsShow}"
 	)
 		ul.thumbs
 			li.thumb(
@@ -19,6 +20,7 @@ div.gallery-cntr
 	div.sidebarLeft.vslider(
 		vslider="album"
 		vslider-scroller="left"
+		ng-class="{'veil' : !control.galleriesShow }"
 	)
 
 		ul.galleries
@@ -36,7 +38,53 @@ div.gallery-cntr
 
 	//----------------------------------------------------------------------
 	//-- stage -------------------------------------------------------------
-	div.stage
-		img(
-			ng-src="{{element}}"
+	div.stage(
+		th-stage
+	)
+		//- img(
+		//- 	th-media
+		//- )
+		//- ng-src="{{element}}"
+
+div.control
+
+	div.progress.progress-striped.active
+		div.progress-bar.progress-bar-success(
+			role="progressbar"
+			th-slideshow-progress
 		)
+
+	div.btn-group
+		button.btn.btn-default(
+			type="button"
+			ng-class="{'active': control.galleriesShow }"
+			ng-click="control.galleriesShow = !control.galleriesShow"
+		)
+			span.glyphicon.glyphicon-book
+
+		button.btn.btn-default(
+			type="button"
+			ng-click="prevImage()"
+		)
+			span.glyphicon.glyphicon-step-backward
+
+		button.btn.btn-default(
+			type="button"
+			ng-click="slideshow = !slideshow"
+		) 
+			span.glyphicon(
+				ng-class="{'glyphicon-play' : !slideshow, 'glyphicon-pause' : slideshow}"
+			)
+
+		button.btn.btn-default(
+			type="button"
+			ng-click="nextImage()"
+		) 
+			span.glyphicon.glyphicon-step-forward
+
+		button.btn.btn-default(
+			type="button"
+			ng-class="{'active': control.thumbsShow }"
+			ng-click="control.thumbsShow = !control.thumbsShow"
+		)
+			span.glyphicon.glyphicon-picture

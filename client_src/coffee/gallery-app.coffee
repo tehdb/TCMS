@@ -6,4 +6,5 @@ app.constant('settings', {
 	galleriesShow : true
 	thumbsShow : true
 	thumbsPath : 'thumbs/'
+	sidebarW : 165
 })

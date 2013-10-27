@@ -1,29 +1,52 @@
 
 app.controller("GalleryCtrl", [ "$scope", "$timeout", "$q", "AlbumService", 'settings',  (scope, to, q, as, sttgs)->
-	scope.galleryIndex = 0
-	scope.elementIndex = 0
 	scope.album = null
-	scope.element = null
+	scope.galleryIndex = null
+	scope.elementIndex = null
+	scope.slideshow = false
 
-	do scope.loadAlbum = ( idx=1)->
+	scope.control = {
+		thumbsShow : false
+		galleriesShow : false
+	}
+
+	do scope.loadAlbum = ( idx=0)->
 		albumPromise = as.getAlbum( 1 )
 		albumPromise.then (album) ->
-			scope.selectGallery( scope.galleryIndex, album)
-
-	scope.selectGallery = (idx, album) ->
-		_album = album or scope.album
-		promise = as.preloadThumbs( _album, idx )
-		promise.then (album) ->
 			scope.album = album
+			scope.galleryIndex = null
+			scope.selectGallery(0)
+
+
+	scope.selectGallery = (idx) ->
+		promise = as.preloadThumbs( idx )
+		promise.then () ->
 			scope.galleryIndex = idx
+			scope.elementIndex = null
 			scope.selectImage(0)
 
-	# TODO: preload image
-	scope.selectImage = (idx) ->
-		scope.elementIndex = idx
-		path = scope.album.galleries[scope.galleryIndex].path
-		scope.element = path + scope.album.galleries[scope.galleryIndex].elements[idx].file
 
+	scope.selectImage = (idx) ->
+		as.loadImage( scope.galleryIndex, idx ).then () ->
+			scope.elementIndex = idx
+
+
+	scope.nextImage = () ->
+		idx = scope.elementIndex
+		if ++idx > scope.album.galleries[scope.galleryIndex].elements.length-1
+			idx = 0
+
+		scope.selectImage(idx)
+
+
+	scope.prevImage = () ->
+		idx = scope.elementIndex
+		if --idx < 0
+			idx = scope.album.galleries[scope.galleryIndex].elements.length-1
+
+		scope.selectImage(idx)
+
+			
 
 	scope.safeApply = (fn) ->
 		phase = this.$root.$$phase

@@ -8,18 +8,23 @@
     slideshowDur: 5,
     galleriesShow: true,
     thumbsShow: true,
-    thumbsPath: 'thumbs/'
+    thumbsPath: 'thumbs/',
+    sidebarW: 165
   });
 
   app.service("AlbumService", [
     '$http', '$log', '$timeout', '$q', 'settings', function(http, log, to, q, sttgs) {
       return {
-        getAlbum: function(id) {
-          var defer;
+        albums: {},
+        albumIndex: null,
+        getAlbum: function(idx) {
+          var defer, _this;
           defer = q.defer();
+          _this = this;
+          _this.albumIndex = idx;
           http({
             method: 'GET',
-            url: "/album/" + id
+            url: "/album/" + idx
           }).success(function(data, status, headers, config) {
             var coverLoaded, coverTotal, elem, g, gi, img, thumbsPath, _i, _j, _len, _len1, _ref, _ref1, _results;
             data.info = {
@@ -48,6 +53,7 @@
               img.onload = function() {
                 data.galleries[this.gidx].coverImg = this;
                 if (++coverLoaded >= coverTotal) {
+                  _this.albums[_this.albumIndex] = data;
                   return defer.resolve(data);
                 }
               };
@@ -60,25 +66,26 @@
           });
           return defer.promise;
         },
-        preloadThumbs: function(album, gidx) {
-          var defer, eidx, elem, thumb, thumbsLoaded, thumbsTotal, _i, _len, _ref;
+        preloadThumbs: function(gidx) {
+          var defer, eidx, elem, thumb, thumbsLoaded, thumbsTotal, _i, _len, _ref, _this;
+          _this = this;
           defer = q.defer();
-          if (album.galleries[gidx].thumbsLoaded) {
+          if (_this.albums[_this.albumIndex].galleries[gidx].thumbsLoaded) {
             to(function() {
-              return defer.resolve(album);
+              return defer.resolve(true);
             }, 11);
           } else {
-            thumbsTotal = album.galleries[gidx].elements.length;
+            thumbsTotal = _this.albums[_this.albumIndex].galleries[gidx].elements.length;
             thumbsLoaded = 0;
-            _ref = album.galleries[gidx].elements;
+            _ref = _this.albums[_this.albumIndex].galleries[gidx].elements;
             for (eidx = _i = 0, _len = _ref.length; _i < _len; eidx = ++_i) {
               elem = _ref[eidx];
               thumb = new Image();
               thumb.onload = function() {
-                album.galleries[gidx].elements[this.idx].thumbImg = this;
+                _this.albums[_this.albumIndex].galleries[gidx].elements[this.idx].thumbImg = this;
                 if (++thumbsLoaded >= thumbsTotal) {
-                  album.galleries[gidx].thumbsLoaded = true;
-                  return defer.resolve(album);
+                  _this.albums[_this.albumIndex].galleries[gidx].thumbsLoaded = true;
+                  return defer.resolve(true);
                 }
               };
               thumb.src = elem.thumbSrc;
@@ -87,19 +94,26 @@
           }
           return defer.promise;
         },
-        preloadImage: function(album, gidx, iidx) {
-          var defer, gpath, img;
+        loadImage: function(gidx, iidx) {
+          var defer, gpath, img, _this;
+          _this = this;
           defer = q.defer();
-          gpath = scope.album.galleries[gidx].path;
-          img = new Image();
-          img.onload = function() {
-            album.elements[gidx].elements[iidx].fileImg = this;
-            return defer.resolve(album);
-          };
-          img.onerror = function() {
-            return defer.reject(status, config);
-          };
-          img.src = gpath + album.elements[gidx].elements[iidx].file;
+          gpath = _this.albums[_this.albumIndex].galleries[gidx].path;
+          if (_this.albums[_this.albumIndex].galleries[gidx].elements[iidx].fileImg != null) {
+            to(function() {
+              return defer.resolve(true);
+            }, 11);
+          } else {
+            img = new Image();
+            img.onload = function() {
+              _this.albums[_this.albumIndex].galleries[gidx].elements[iidx].fileImg = this;
+              return defer.resolve(true);
+            };
+            img.onerror = function() {
+              return defer.reject(status, config);
+            };
+            img.src = gpath + _this.albums[_this.albumIndex].galleries[gidx].elements[iidx].file;
+          }
           return defer.promise;
         }
       };
@@ -152,32 +166,52 @@
 
   app.controller("GalleryCtrl", [
     "$scope", "$timeout", "$q", "AlbumService", 'settings', function(scope, to, q, as, sttgs) {
-      scope.galleryIndex = 0;
-      scope.elementIndex = 0;
       scope.album = null;
-      scope.element = null;
+      scope.galleryIndex = null;
+      scope.elementIndex = null;
+      scope.slideshow = false;
+      scope.control = {
+        thumbsShow: false,
+        galleriesShow: false
+      };
       (scope.loadAlbum = function(idx) {
         var albumPromise;
         albumPromise = as.getAlbum(1);
         return albumPromise.then(function(album) {
-          return scope.selectGallery(scope.galleryIndex, album);
-        });
-      })(1);
-      scope.selectGallery = function(idx, album) {
-        var promise, _album;
-        _album = album || scope.album;
-        promise = as.preloadThumbs(_album, idx);
-        return promise.then(function(album) {
           scope.album = album;
+          scope.galleryIndex = null;
+          return scope.selectGallery(0);
+        });
+      })(0);
+      scope.selectGallery = function(idx) {
+        var promise;
+        promise = as.preloadThumbs(idx);
+        return promise.then(function() {
           scope.galleryIndex = idx;
+          scope.elementIndex = null;
           return scope.selectImage(0);
         });
       };
       scope.selectImage = function(idx) {
-        var path;
-        scope.elementIndex = idx;
-        path = scope.album.galleries[scope.galleryIndex].path;
-        return scope.element = path + scope.album.galleries[scope.galleryIndex].elements[idx].file;
+        return as.loadImage(scope.galleryIndex, idx).then(function() {
+          return scope.elementIndex = idx;
+        });
+      };
+      scope.nextImage = function() {
+        var idx;
+        idx = scope.elementIndex;
+        if (++idx > scope.album.galleries[scope.galleryIndex].elements.length - 1) {
+          idx = 0;
+        }
+        return scope.selectImage(idx);
+      };
+      scope.prevImage = function() {
+        var idx;
+        idx = scope.elementIndex;
+        if (--idx < 0) {
+          idx = scope.album.galleries[scope.galleryIndex].elements.length - 1;
+        }
+        return scope.selectImage(idx);
       };
       return scope.safeApply = function(fn) {
         var phase;
@@ -342,6 +376,118 @@
           return scope.$watch('album', function(nv, ov) {
             if (nv != null) {
               return element.append(scope.album.galleries[idx].coverImg);
+            }
+          });
+        }
+      };
+    }
+  ]);
+
+  app.directive("thStage", [
+    '$timeout', 'settings', function(to, sttgs) {
+      return {
+        restrict: 'A',
+        scope: true,
+        link: function(scope, element, attrs) {
+          var _centerImg;
+          _centerImg = function($img) {
+            var difH, difW, imgH, imgW, imgX, imgY, scaleFactor, sidebarFactor, stageH, stageW;
+            sidebarFactor = 0;
+            if (scope.control.thumbsShow) {
+              sidebarFactor++;
+            }
+            if (scope.control.galleriesShow) {
+              sidebarFactor++;
+            }
+            stageW = element.width() - sidebarFactor * sttgs.sidebarW;
+            stageH = element.height() - 20;
+            imgW = $img[0].width;
+            imgH = $img[0].height;
+            difW = imgW / stageW;
+            difH = imgH / stageH;
+            scaleFactor = 1;
+            if (difW > 1 || difH > 1) {
+              if (difW > difH) {
+                scaleFactor = difW;
+              } else {
+                scaleFactor = difH;
+              }
+              imgW = Math.round(imgW / scaleFactor);
+              imgH = Math.round(imgH / scaleFactor);
+            }
+            imgX = (stageW - imgW) / 2;
+            imgY = (stageH - imgH) / 2 + 10;
+            if (scope.control.galleriesShow) {
+              imgX += sttgs.sidebarW;
+            }
+            return $img.css({
+              width: imgW,
+              height: imgH,
+              left: imgX,
+              top: imgY
+            });
+          };
+          scope.$watchCollection('[control.thumbsShow, control.galleriesShow]', function(nv, ov) {
+            var $img;
+            if (nv != null) {
+              $img = element.find('img');
+              if ($img.length > 0) {
+                return _centerImg($img);
+              }
+            }
+          });
+          return scope.$watch('elementIndex', function(nv, ov) {
+            var $img, $media;
+            if (nv != null) {
+              $media = element.find('img');
+              $img = $(scope.album.galleries[scope.galleryIndex].elements[nv].fileImg);
+              _centerImg($img);
+              $img.addClass('veilin');
+              if ($media.length > 0) {
+                $media.addClass('veilout');
+                return to(function() {
+                  $media.replaceWith($img);
+                  return to(function() {
+                    $media.removeClass('veilout');
+                    return $img.removeClass('veilin');
+                  }, 150);
+                }, 150);
+              } else {
+                element.append($img);
+                return to(function() {
+                  return $img.removeClass('veilin');
+                }, 150);
+              }
+            }
+          });
+        }
+      };
+    }
+  ]);
+
+  app.directive("thSlideshowProgress", [
+    'settings', function(sttgs) {
+      return {
+        restrict: 'A',
+        scope: true,
+        link: function(scope, element, attrs) {
+          var _next;
+          _next = function() {
+            return element.animate({
+              'width': '100%'
+            }, sttgs.slideshowDur * 1000, 'linear', function() {
+              element.width(0);
+              scope.nextImage();
+              if (scope.slideshow) {
+                return _next();
+              }
+            });
+          };
+          return scope.$watch("slideshow", function(nv, ov) {
+            if (nv) {
+              return _next();
+            } else {
+              return element.stop().width(0);
             }
           });
         }
